@@ -6,5 +6,61 @@
         Title="{Binding Title}" Height="350" Width="525">
     <Grid>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+
+        <Grid x:Name="LayoutRoot" Margin="0,0,0.4,-0.2">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF7B97D4" />
+                    <GradientStop Color="#FF244C8D" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <!--<ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5" />-->
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="ToDo List View" TextWrapping="Wrap" Grid.RowSpan="1" Grid.ColumnSpan="2" FontSize="18" Foreground="#FF2F3806" Margin="8,8,8,8" />
+
+            <DataGrid x:Name="ToDoList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectionMode="Single"
+                           ItemsSource="{Binding Path=ToDoItemList}" AutoGenerateColumns="False" Margin="8"
+                           AutomationProperties.AutomationId="ToDoListGrid" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Task" Binding="{Binding Path=task}" IsReadOnly="True" Width="*" />
+                    <DataGridTextColumn Header="Detail" Binding="{Binding Path=detail}" IsReadOnly="True" Width="*" />
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button>Details</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button>Complete</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button>Delete</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBox x:Name="textBox" Height="20" TextWrapping="Wrap" Text="Search..." Margin="259,12,170.4,8" Grid.ColumnSpan="2"/>
+            <Button x:Name="button" Content="Add Item" Grid.Column="1" HorizontalAlignment="Left" Margin="93.8,13,0,0" VerticalAlignment="Top" Width="75"/>
+            <Button x:Name="button1" Content="Stats" Grid.Column="1" Margin="173.8,13,10.4,8" Width="75"/>
+        </Grid>
     </Grid>
 </Window>
