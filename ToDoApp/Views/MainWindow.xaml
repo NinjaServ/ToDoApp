@@ -3,64 +3,88 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="350" Width="525">
+        Title="{Binding Title}" Height="350" Width="525" MinHeight="200" MinWidth="400">
+    
     <Grid>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
-
-        <Grid x:Name="LayoutRoot" Margin="0,0,0.4,-0.2">
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF7B97D4" />
-                    <GradientStop Color="#FF244C8D" Offset="1" />
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <!--<ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="5" />-->
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" Text="ToDo List View" TextWrapping="Wrap" Grid.RowSpan="1" Grid.ColumnSpan="2" FontSize="18" Foreground="#FF2F3806" Margin="8,8,8,8" />
-
-            <DataGrid x:Name="ToDoList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectionMode="Single"
-                           ItemsSource="{Binding Path=ToDoItemList}" AutoGenerateColumns="False" Margin="8"
-                           AutomationProperties.AutomationId="ToDoListGrid" IsReadOnly="True">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Task" Binding="{Binding Path=task}" IsReadOnly="True" Width="*" />
-                    <DataGridTextColumn Header="Detail" Binding="{Binding Path=detail}" IsReadOnly="True" Width="*" />
-                    <DataGridTemplateColumn Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button>Details</Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button>Complete</Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button>Delete</Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <TextBox x:Name="textBox" Height="20" TextWrapping="Wrap" Text="Search..." Margin="259,12,170.4,8" Grid.ColumnSpan="2"/>
-            <Button x:Name="button" Content="Add Item" Grid.Column="1" HorizontalAlignment="Left" Margin="93.8,13,0,0" VerticalAlignment="Top" Width="75"/>
-            <Button x:Name="button1" Content="Stats" Grid.Column="1" Margin="173.8,13,10.4,8" Width="75"/>
-        </Grid>
+        <StackPanel>
+            <Button DockPanel.Dock="Top" Click="Button_Click">Add View</Button>
+        </StackPanel>
+        <ContentControl x:Name="ContentRegion" 
+                        prism:RegionManager.RegionName="ContentRegion" />
     </Grid>
+    
+    <!--<DockPanel LastChildFill="True">
+        <Button DockPanel.Dock="Top" Click="Button_Click">Add View</Button>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </DockPanel>-->
+
+    <!--<DockPanel LastChildFill="True">
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="5" >
+            <Button Command="{Binding NavigateCommand}" CommandParameter="ItemList" Margin="5">Navigate to View A</Button>
+            <Button Command="{Binding NavigateCommand}" CommandParameter="ViewB" Margin="5">Navigate to View B</Button>
+        </StackPanel>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" Margin="5"  />
+    </DockPanel>-->
+    <!--<Grid>
+        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>-->
+    
+    <!--<DockPanel LastChildFill="True">
+        <ContentControl DockPanel.Dock ="Top" prism:RegionManager.RegionName="{x:Static MainWindow:RegionNames.MainRegion}"/>
+        <ContentControl prism:RegionManager.RegionName="{x:Static MainWindow:RegionNames.ContentRegion}"/>
+    </DockPanel>-->
 </Window>
+
+
+<!--<Window.Resources>
+    <Style x:Key="ContentControlRegionStyle"
+               TargetType="ContentControl">
+        <Setter Property="Foreground"
+                    Value="#FF000000" />
+        <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+        <Setter Property="VerticalContentAlignment"
+                    Value="Top" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Row="0"
+                                    CornerRadius="4,4,0,0"
+                                    BorderBrush="#FF0254B4"
+                                    BorderThickness="1"
+                                    VerticalAlignment="Top">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1"
+                                                         StartPoint="0.5,0">
+                                    <GradientStop Color="#FF6777A0"
+                                                      Offset="0" />
+                                    <GradientStop Color="#FF2A3358"
+                                                      Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="{TemplateBinding Name}"
+                                           TextWrapping="Wrap"
+                                           HorizontalAlignment="Center"
+                                           Foreground="#FFD9E3CF"
+                                           FontWeight="Normal"
+                                           FontFamily="Portable User Interface"
+                                           FontSize="12"
+                                           VerticalAlignment="Center" />
+                        </Border>
+                        <ContentPresenter Grid.Row="1"
+                                              Cursor="{TemplateBinding Cursor}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</Window.Resources>-->

@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="ToDoApp.Views.ItemList_View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ToDoApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="525">
+    <Grid>
+        <Grid Margin="0,0,0.4,-0.2">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF7B97D4" />
+                    <GradientStop Color="#FF244C8D" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <!--<ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5" />-->
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="ToDo List View" TextWrapping="Wrap" Grid.RowSpan="1" Grid.ColumnSpan="2" FontSize="18" Foreground="#FF2F3806" Margin="8,8,8,8" />
+
+            <DataGrid x:Name="ToDoList" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" SelectionMode="Single"
+                           ItemsSource="{Binding Path=ToDoItemList}" AutoGenerateColumns="False" Margin="8"
+                           AutomationProperties.AutomationId="ToDoListGrid" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="#" Binding="{Binding Path=id}" IsReadOnly="True" Width="Auto" />
+                    <DataGridTextColumn Header="Task" Binding="{Binding Path=task}" IsReadOnly="True" Width="*" />
+                    <DataGridTemplateColumn Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button>Details</Button>
+                                    <Button>Complete</Button>
+                                    <Button>Delete</Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBox x:Name="textBox" Grid.Row="1" Grid.Column="0" Height="20" TextWrapping="Wrap" Text="Search..." Margin="1,1,0,0" />
+            <Button x:Name="button"  Content="Add Item" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,8.4,11" VerticalAlignment="Center" Width="75"/>
+            <Button x:Name="button1" Content="Stats" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,83.4,11" Width="75"/>
+            <Button x:Name="button2" Content="Select" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,158.4,11" Width="75" />
+        </Grid>
+    </Grid>
+</UserControl>

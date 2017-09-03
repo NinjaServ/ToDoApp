@@ -1,53 +1,84 @@
-﻿using Prism.Mvvm;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+
+using System;
+using Prism.Commands;
+using Prism.Mvvm; 
+using Prism.Regions;
 using ToDoApp.Models;
 
 namespace ToDoApp.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "ToDo Application - Prism Unity Application";
+        private readonly IRegionManager _regionManager;
+
+        private string _title = "ToDo App Shell - Prism Unity Application";
         public string Title
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
 
-        public int MyProperty { get; set; }
+        public DelegateCommand<string> NavigateCommand { get; private set; }
 
-        internal ObservableCollection<ToDoItem> _ToDoItemList;
-        public ObservableCollection<ToDoItem> ToDoItemList
+        public MainWindowViewModel(IRegionManager regionManager)
         {
-            get { return _ToDoItemList; }  
-            set
-            {
-                if (value != _ToDoItemList)
-                {
-                    _ToDoItemList = value;
-                    //if (listChanged != null)
-                    //{
-                    //    listChanged(_ToDoItemList);
-                    //}
-                }
-            }
+            _regionManager = regionManager;
+
+            NavigateCommand = new DelegateCommand<string>(Navigate);
         }
 
-        public MainWindowViewModel()
+        private void Navigate(string navigatePath)
         {
-
-            _ToDoItemList = new ObservableCollection<ToDoItem>();
-            _ToDoItemList.Add(new ToDoItem("Item1", "These are Details 1"));
-            _ToDoItemList.Add(new ToDoItem("Item2", "These are Details 2"));
-            _ToDoItemList.Add(new ToDoItem("Item3", "These are Details 3"));
-
+            if (navigatePath != null)
+                _regionManager.RequestNavigate("ContentRegion", navigatePath, NavigationComplete);
         }
 
-        //public delegate void PropertyChagedHandler(object newValue);
-        //public event PropertyChagedHandler listChanged; 
+        private void NavigationComplete(NavigationResult result)
+        {
+            System.Windows.MessageBox.Show(String.Format("Navigation to {0} complete. ", result.Context.Uri));
+        }
+
+        //public IList<string> listProperty { get; set; }
+
+        //internal ObservableCollection<ToDoItem> _ToDoItemList;
+        //public ObservableCollection<ToDoItem> ToDoItemList
+        //{
+        //    get { return _ToDoItemList; }  
+        //    set
+        //    {
+        //        if (value != _ToDoItemList)
+        //        {
+        //            _ToDoItemList = value;
+        //            //if (listChanged != null)
+        //            //{
+        //            //    listChanged(_ToDoItemList);
+        //            //}
+        //        }
+        //    }
+        //}
+
+        //public MainWindowViewModel()
+        //{
+
+        //    _ToDoItemList = new ObservableCollection<ToDoItem>();
+        //    _ToDoItemList.Add(new ToDoItem("Item1", "These are Details 1"));
+        //    _ToDoItemList.Add(new ToDoItem("Item2", "These are Details 2"));
+        //    _ToDoItemList.Add(new ToDoItem("Item3", "These are Details 3"));
+        //    _ToDoItemList.Add(new ToDoItem("aItem4", "Oh Details 4"));
+        //    _ToDoItemList.Add(new ToDoItem("Item 5", "For 5 details are here"));
+        //    _ToDoItemList.Add(new ToDoItem("zItem6", "Some 6 details are ny"));
+        //}
+
+        ////public delegate void PropertyChagedHandler(object newValue);
+        ////public event PropertyChagedHandler listChanged; 
 
         ~MainWindowViewModel()
         {
-            //ToDoItemList = null;
+            //_ToDoItemList = null;
         }
+
+
     }
 }

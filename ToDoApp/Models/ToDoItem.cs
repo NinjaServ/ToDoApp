@@ -13,7 +13,9 @@ namespace ToDoApp.Models
 {
     public class ToDoItem
     {
-        private int id { get; set; }
+        public static int counter = 1; 
+
+        public int id { get; set; }
         public string task { get; set; }
         public string detail { get; set; }
         public DateTime createDate { get; set; }
@@ -71,7 +73,7 @@ namespace ToDoApp.Models
         /// </summary>
         private void setDefaults()
         {
-            id = DateTime.Now.GetHashCode();
+            id = counter++;
             task = @"";
             detail = @"";
             createDate = DateTime.Now;
