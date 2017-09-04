@@ -32,6 +32,8 @@ namespace ToDoApp.Infrastructure
             _container.RegisterTypeForNavigation<ItemList_View>();   //ItemList_View
             _container.RegisterTypeForNavigation<AddItem_View>();   //AddItem_View
 
+            //_regionManager.RequestNavigate("ContentRegion", "AddItem_View");
+
             //_regionManager.RequestNavigate("ContentRegion",
             //                    new Uri("ItemList_View", UriKind.Relative));
 
@@ -39,13 +41,13 @@ namespace ToDoApp.Infrastructure
             //_regionManager.RegisterViewWithRegion("ContentRegion", () =>
             //          _container.Resolve<ItemList_View>());
 
-            Console.WriteLine($"Region Count: {0}", _regionManager.Regions.Count());
-
             //--View Injection 
             //IRegion mainRegion = _regionManager.Regions["ContentRegion"];
             //ItemList_View view = this._container.Resolve<ItemList_View>();
             //mainRegion.Add(view);
             //mainRegion.RequestNavigate(new Uri("ItemList_View", UriKind.Relative));
+
+            Console.WriteLine($"Region Count: {0}", _regionManager.Regions.Count());
         }
 
         //private void SelectedEmployeeChanged(object sender, EventArgs e)

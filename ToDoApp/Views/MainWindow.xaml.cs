@@ -17,28 +17,13 @@ namespace ToDoApp.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        //public MainWindow()
-        //{
-        //    InitializeComponent();
-        //}
-
+       
         ////Unity - Creating the View and View Model
         //public MainWindow (ItemList_ViewModel viewModel)
         //{
         //    this.DataContext = viewModel;
         //}
 
-        //public static class RegionNames
-        //{
-        //    public static readonly string MainRegion = "MainRegion";
-        //    public static readonly string ContentRegion = "ContentRegion";
-        //}
-
-        //[Dependency]
-        //public ShellViewModel ViewModel
-        //{
-        //    set { this.DataContext = value; }
-        //}
 
         IUnityContainer _container;
         IRegionManager _regionManager;
@@ -58,11 +43,23 @@ namespace ToDoApp.Views
         {
             Debug.WriteLine($"Region Count: {0}", _regionManager.Regions.Count());
 
+
             _region = _regionManager.Regions["ContentRegion"];
             var view = _container.Resolve<ItemList_View>();
+            //var view = _container.Resolve<AddItem_View>(); 
             _region.Add(view);
 
             //var view2 = _container.Resolve<AddItem_View>();
+            //_region.RequestNavigate(new Uri("AddItem_View", UriKind.Relative));
+        }
+
+        public void NavigateToView(object sender, RoutedEventArgs e)
+        {
+            //--View Injection 
+            var viewType = sender.GetType().ToString();
+            _region.RequestNavigate(new Uri(viewType, UriKind.Relative));
+
+            //var view = _container.Resolve<AddItem_View>();
             //_region.RequestNavigate(new Uri("AddItem_View", UriKind.Relative));
         }
 

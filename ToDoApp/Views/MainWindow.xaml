@@ -6,9 +6,6 @@
         Title="{Binding Title}" Height="350" Width="525" MinHeight="200" MinWidth="400">
     
     <Grid>
-        <StackPanel>
-            <Button DockPanel.Dock="Top" Click="Button_Click">Add View</Button>
-        </StackPanel>
         <ContentControl x:Name="ContentRegion" 
                         prism:RegionManager.RegionName="ContentRegion" />
     </Grid>

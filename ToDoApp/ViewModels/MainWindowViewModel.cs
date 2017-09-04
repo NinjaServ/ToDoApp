@@ -3,9 +3,13 @@ using System.Collections.ObjectModel;
 
 using System;
 using Prism.Commands;
-using Prism.Mvvm; 
+using Prism.Mvvm;
 using Prism.Regions;
 using ToDoApp.Models;
+
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace ToDoApp.ViewModels
 {
@@ -27,6 +31,7 @@ namespace ToDoApp.ViewModels
             _regionManager = regionManager;
 
             NavigateCommand = new DelegateCommand<string>(Navigate);
+
         }
 
         private void Navigate(string navigatePath)
@@ -80,5 +85,60 @@ namespace ToDoApp.ViewModels
         }
 
 
+
+        internal  ITimer timer;
+        public event EventHandler<MessageReceivedEventArgs> MessageReceived;
+        internal  Dispatcher dispatcher;
+        internal  Random random;
+
+
+        public void MessageService()
+        {
+            this.dispatcher = Application.Current.Dispatcher;
+            this.random = new Random();
+            this.timer = new DispatcherTimerWrapper(new TimeSpan(0, 0, 5));
+            this.timer.Tick += this.OnTimerTick;
+            this.timer.Start();
+        }
+
+        private void OnTimerTick(object sender, EventArgs args)
+        {
+            var coinToss = this.random.Next(2);
+            if (coinToss == 0)
+            {
+                this.SendMessage("My Message", "My Title");
+            }
+            else
+            {
+                coinToss = this.random.Next(150);
+                if (coinToss == 0)
+                {
+                    this.SendMessage("My Other Message", "My Other Title");
+                }
+            }
+        }
+
+        private void SendMessage(string message, string title)
+        {
+            var handler = this.MessageReceived;
+            if (handler != null)
+            {
+                handler(this, new MessageReceivedEventArgs(title, message));
+            }
+        }
+
+        public class MessageReceivedEventArgs : EventArgs
+        {
+            public MessageReceivedEventArgs(string title, string message)
+            {
+                this.Message = new IMessage(message, title);
+            }
+
+            public IMessage Message { get; private set; }
+        }
+
+
+
     }
 }
+

@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace ToDoApp.ViewModels
 {
-    public class ViewBViewModel : BindableBase
+    public class ItemDetail_ViewModel : BindableBase
     {
-        public ViewBViewModel()
+        public ItemDetail_ViewModel()
         {
 
         }
