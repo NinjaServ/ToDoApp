@@ -82,6 +82,24 @@ namespace ToDoApp.Models
         }
 
 
+        public bool IsComplete()
+        {
+            DateTime initDate = new DateTime();
+            return (this.completeDate > initDate ? true : false);
+        }
+
+        public bool IsDue()
+        {
+            return (this.dueDate.Date == DateTime.Now.Date && (!IsComplete()) ? true : false);
+        }
+
+        public bool IsOverdue()
+        {
+            return (this.dueDate.Date > DateTime.Now.Date && (!IsComplete()) ? true : false);
+        }
+
+
+
         /// <summary>
         /// Convert values inside ToDoItem to a Dictionary object
         /// </summary>

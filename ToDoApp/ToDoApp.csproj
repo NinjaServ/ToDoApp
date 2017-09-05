@@ -93,6 +93,7 @@
     <Compile Include="Models\DataTableToCSV.cs" />
     <Compile Include="Models\ITimer.cs" />
     <Compile Include="Models\IMessage.cs" />
+    <Compile Include="Models\MethodWrapper.cs" />
     <Compile Include="Models\ShowNotificationAction.cs" />
     <Compile Include="ViewModels\AddItem_ViewModel.cs" />
     <Compile Include="ViewModels\ItemDetail_ViewModel.cs" />

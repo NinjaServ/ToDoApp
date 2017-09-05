@@ -25,6 +25,7 @@ namespace ToDoApp.ViewModels
         IRegionNavigationJournal _journal;
         IRegionNavigationService _navService;
 
+        internal string _filterString;
         public IList<string> listProperty { get; set; }
 
         internal ObservableCollection<ToDoItem> _ToDoItemList;
@@ -40,8 +41,11 @@ namespace ToDoApp.ViewModels
 
         //public DelegateCommand<ToDoItem> ItemSelectedCommand { get; private set; }
         public DelegateCommand GoAddItemCommand { get; set; }
-        public DelegateCommand GoDetailCommand { get; set; }
         public DelegateCommand GoStatsCommand { get; set; }
+        public DelegateCommand GoSelectCommand { get; set; }
+        public DelegateCommand GoDetailCommand { get; set; }
+        public DelegateCommand GoDeleteCommand { get; set; }
+        public DelegateCommand GoCompleteCommand { get; set; }
 
 
         //public ItemList_ViewModel()
@@ -58,23 +62,53 @@ namespace ToDoApp.ViewModels
 
             //ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
             CreateItems();
+            _filterString = "";
 
             // Initialize the CollectionView for the underlying model
             // and track the current selection.
-            this.ItemsCV = new ListCollectionView(ToDoItemList);
+            this.ItemsCV = CollectionViewSource.GetDefaultView(ToDoItemList);
+            //this.ItemsCV = new ListCollectionView(ToDoItemList);
             this.ItemsCV.CurrentChanged += new EventHandler(this.ItemSelected); //SelectedItemChanged
+            this.ItemsCV.Filter = SearchFilter;
+            //_filterString = "Search Text..."; 
 
 
             //Command to navigate to AddItem_View
             GoAddItemCommand = new DelegateCommand(GoAddItem, () => true);
             //Command to navigate to ItemDetail_View
+            GoStatsCommand = new DelegateCommand(GoForward, CanGoForward);
+            //GoMessage, () => true);
+            GoSelectCommand = new DelegateCommand(GoForward, CanGoForward);
+
             GoDetailCommand = new DelegateCommand(GoItemDetails, () => true); //CanGoForward
+            GoDeleteCommand = new DelegateCommand(GoItemDelete, () => true); 
+            GoCompleteCommand = new DelegateCommand(GoItemComplete, () => true); //CanGoForward
+
             //GoStatsCommand = new DelegateCommand(() => new IMessage("My Test Message", "A test title"),
             //                ()=>true);
-            GoStatsCommand = new DelegateCommand(GoForward, CanGoForward); 
-                //GoMessage, () => true);
 
             //this.eventAggregator.GetEvent<PubSubEvent<int>>().Subscribe(this.ItemSelectedEvent, true);
+        }
+
+       
+
+        private bool SearchFilter(object sender)
+        {
+            ToDoItem item = sender as ToDoItem;
+            //bool contains = item.task.IndexOf(_filterString, StringComparison.OrdinalIgnoreCase) >= 0;
+            bool contains = item.task.IndexOf(_filterString, StringComparison.CurrentCultureIgnoreCase) != -1 ;
+            return contains;  
+        }
+
+        public string FilterString
+        {
+            get { return _filterString; }
+            set
+            {
+                SetProperty(ref _filterString, value);
+                if (this.ItemsCV != null)
+                    this.ItemsCV.Refresh();
+            }
         }
 
 
@@ -149,6 +183,28 @@ namespace ToDoApp.ViewModels
                 _regionManager.RequestNavigate("ContentRegion", "ItemDetail_View", parameters);
             }
         }
+
+        private void GoItemComplete()
+        {
+            ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+
+            if (item != null)
+            {
+                item.completeDate = DateTime.Now;
+            }
+        }
+
+        private void GoItemDelete()
+        {
+            ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+
+            if (item != null)
+            {
+                ToDoItemList.Remove(item);
+                item = null;
+            }
+        }
+
 
         private void GoMessage()
         {
