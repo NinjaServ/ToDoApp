@@ -1,0 +1,68 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:ToDoApp.Views">
+
+    <sys:String x:Key="aID">1</sys:String>
+    <sys:String x:Key="TASK">MyTask</sys:String>
+    <x:Array x:Key="MockedIDs" Type="{x:Type sys:String}">
+        <sys:String>1</sys:String>
+        <sys:String>2</sys:String>
+        <sys:String>3</sys:String>
+    </x:Array>
+    <x:Array x:Key="MockedTasks" Type="{x:Type sys:String}">
+        <sys:String>John</sys:String>
+        <sys:String>Andy</sys:String>
+        <sys:String>Tred</sys:String>
+    </x:Array>
+    <x:Array x:Key="MockedList" Type="{x:Type sys:String}">
+        <sys:String>"MyText1"</sys:String>
+        <sys:String>"MyText2"</sys:String>
+        <sys:String>"MyText3"</sys:String>
+    </x:Array>
+</ResourceDictionary>
+
+
+
+<!--<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ToDoApp.Views">
+    
+</ResourceDictionary>-->
+
+<!--<local:DataGridRows xmlns:local="clr-namespace:ToDoApp.Views">
+    <local:DataGridRow id="AAAA"/>
+    <local:DataGridRow id="AAAA"/>
+    <local:DataGridRow id="AAAA"/>
+</local:DataGridRows>-->
+
+<!--<ResourceDictionary>
+    <x:Array x:Key="MockedList" Type="local:MockRecord">
+        <local:MockRecord id="1." task="Fred Flintstone" />
+        <local:MockRecord id="2." task="Wilma Flintstone" />
+        <local:MockRecord id="3." task="Barney Rubble" />
+    </x:Array>
+</ResourceDictionary>-->
+   
+    
+<!--xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+<Page.Resources>
+    <x:String x:Key="greeting">Hello world</x:String>
+    <x:String x:Key="goodbye">Goodbye world</x:String>
+</Page.Resources>
+
+<TextBlock Text="{StaticResource greeting}" Foreground="Gray" VerticalAlignment="Center"/>
+-->
+<!--<x:XData Text="Fred Flintstone" />-->
+
+    
+<!--<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ToDoApp.Views">
+    <x:Array x:Key="MockedList" Type="List">
+        <x:XData x:Key="MockedList" x:Name="MockRecord"/>
+        <x:XmlnsDictionary x:Key="1." x:Name="Wilma Flintstone" />
+        <x:XmlnsDictionary x:Key="1." x:Name="Wilma Flintstone" />
+        <x:XmlnsDictionary x:Key="1." x:Name="Barney Rubble" />
+    </x:Array>-->

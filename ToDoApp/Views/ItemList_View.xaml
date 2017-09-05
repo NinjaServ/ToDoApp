@@ -4,10 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ToDoApp.Views"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="525"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True">
+
+
     <Grid>
         <Grid Margin="0,0,0.4,-0.2">
             <Grid.Background>
@@ -33,29 +36,66 @@
             <TextBlock Grid.Row="0" Text="ToDo List View" TextWrapping="Wrap" Grid.RowSpan="1" Grid.ColumnSpan="2" FontSize="18" Foreground="#FF2F3806" Margin="8,8,8,8" />
 
             <!--ToDoItemList-->
-            <DataGrid x:Name="ToDoList" ItemsSource="{Binding Path=ItemsCV}"  
+            <!--ItemsSource="{Binding Path=ItemsCV}"     "{Binding }"  -->
+            <DataGrid x:Name="ToDoGrid" 
+                    d:DataContext="{d:DesignData Source=MockData.xaml, IsDesignTimeCreatable=True}"
+                    ItemsSource="{Binding Path=ItemsCV}"
                             Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" SelectionMode="Single"
                            AutoGenerateColumns="False" Margin="8"
                            AutomationProperties.AutomationId="ToDoListGrid" IsReadOnly="True">
-                
+
+                <!--"{Binding Path=id}"-->
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="#" Binding="{Binding Path=id}" IsReadOnly="True" Width="Auto" />
                     <DataGridTextColumn Header="Task" Binding="{Binding Path=task}" IsReadOnly="True" Width="*" />
                     <DataGridTemplateColumn Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="detailsButton" Command="{Binding Path=DataContext.GoDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Content="Details" />
-                                    <!--<Button x:Name="detailsButton" Command="{Binding GoDetailCommand}">Details</Button>-->
-                                    <Button x:Name="completeButton" Command="{Binding GoDetailCommand}">Complete</Button>
-                                    <Button x:Name="deleteButton" Command="{Binding GoAddItemCommand}">Delete</Button>
+                                <StackPanel Orientation="Horizontal" Margin="1,0,1,0">
+                                    <Button x:Name="detailsButton" Content="Details" Command="{Binding Path=DataContext.GoDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" IsEnabled="{Binding ElementName=ToDoGrid, Path=SelectedItem}" >
+                                        <Button.Style>
+                                            <Style x:Name="ButtonVisibility" TargetType="Button">
+                                                <Setter Property="Opacity" Value=".5" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=IsSelected}" Value="True">
+                                                        <Setter Property="Opacity" Value="1" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <!--<Button x:Name="detailsButton" Command="{Binding GoDetailCommand}">Details</Button>             Value="{x:Null}"-->
+                                    <Button x:Name="completeButton" Content="Complete" Command="{Binding Path=DataContext.GoDetailCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" IsEnabled="{Binding ElementName=ToDoGrid, Path=SelectedItem}" >
+                                        <Button.Style>
+                                            <Style x:Name="ButtonVisibility" TargetType="Button">
+                                                <Setter Property="Opacity" Value=".5" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=IsSelected}" Value="True">
+                                                        <Setter Property="Opacity" Value="1" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button x:Name="deleteButton" Content="Delete" Command="{Binding Path=DataContext.GoDeleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" IsEnabled="{Binding ElementName=ToDoGrid, Path=SelectedItem}" >
+                                        <Button.Style>
+                                            <Style x:Name="ButtonVisibility" TargetType="Button">
+                                                <Setter Property="Opacity" Value=".5" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=IsSelected}" Value="True">
+                                                        <Setter Property="Opacity" Value="1" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <TextBox x:Name="textBox" Grid.Row="1" Grid.Column="0" Height="20" TextWrapping="Wrap" Text="Search..." Margin="1,1,0,0" />
+            <TextBox x:Name="textBox" Grid.Row="1" Grid.Column="0" Height="20" TextWrapping="Wrap" Text="Search..." Margin="8,0,8,0" />
             <Button x:Name="addButton" Content="Add Item" Command="{Binding GoAddItemCommand}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,8.4,11" VerticalAlignment="Center" Width="75"/>
             <Button x:Name="statsButton" Content="Stats" Command="{Binding GoStatsCommand}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,83.4,11" Width="75"/>
             <Button x:Name="selectionButton" Content="Select..." Command="{Binding GoDetailCommand}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,158.4,11" Width="75" />
@@ -63,8 +103,8 @@
     </Grid>
 </UserControl>
 
-    
-    
+
+
 <!--<i:Interaction.Triggers>
     <i:EventTrigger EventName="SelectionChanged">
         <prism:InvokeCommandAction Command="{Binding PersonSelectedCommand}" CommandParameter="{Binding SelectedItem, ElementName=_listOfPeople}" />

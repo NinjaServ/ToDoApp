@@ -104,3 +104,105 @@ using Microsoft.TeamFoundation.MVVM
                 Texts.Add(dialogViewModel.Text);
             }
         }
+
+
+		<DataGrid HorizontalAlignment="Left" Margin="84,57,0,0" VerticalAlignment="Top" Height="183" Width="346" AutoGenerateColumns="False"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  mc:Ignorable="d" 
+                  d:DataContext="{d:DesignData Source=SampleData.xaml, IsDesignTimeCreatable=True}"
+                  ItemsSource="{Binding}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Column1" Binding="{Binding Column1}"></DataGridTextColumn>
+
+
+SampleData.xaml:
+<local:DataGridRows xmlns:local="clr-namespace:WpfApplication8">
+    <local:DataGridRow Column1="AAAA"/>
+</local:DataGridRows>
+
+<UserControl.Resources>
+    <CollectionViewSource x:Key="UsageTypeSource"/>
+</UserControl.Resources>
+
+<UserControl.Resources>
+<XmlDataProvider x:Key="MockList"   XPath="/MockObjects/*" >
+        <x:XData >
+            <MockObjects xmlns="">
+                <MockObject  Name="Louis" Type="TTTT" Number="1" />
+                <MockObject Name="Joseph" Type="TTTT" Number="2" />
+                <MockObject Name="Papineau" Type="ZZZZ" Number="3" />
+            </MockObjects>
+        </x:XData>
+    </XmlDataProvider>
+</UserControl.Resources>
+
+<Grid DataContext="{Binding Source={StaticResource MockList}}">
+    <DataGrid HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch" 
+              ItemsSource="{Binding Mode=Default, XPath=/MockObjects/MockObject}" 
+              AutoGenerateColumns="False">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Name" Binding="{Binding XPath=@Name}" ></DataGridTextColumn>
+            <DataGridTextColumn Header="Type" Binding="{Binding XPath=@Type}"></DataGridTextColumn>
+            <DataGridTextColumn Header="Number" Binding="{Binding XPath=@Number}"></DataGridTextColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</Grid>
+
+
+<UserControl.Resources>
+    <ResourceDictionary>
+        <x:Array x:Key="MockedList" Type="local:MockRecord">
+            <local:MockRecord id="1." task="Fred Flintstone" />
+            <local:MockRecord id="2." task="Wilma Flintstone" />
+            <local:MockRecord id="3." task="Barney Rubble" />
+        </x:Array>
+    </ResourceDictionary>
+</UserControl.Resources>
+<Grid>
+    <DataGrid  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+               ItemsSource="{Binding Source={StaticResource MockedList}}"/>
+</Grid>
+
+
+
+
+<Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="IsEnabled" Value="True" />
+                                                <Setter Property="Opacity" Value="1" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=ToDoGrid, Path=SelectedItem}" Value="{x:Null}">
+                                                        <Setter Property="IsEnabled" Value="False" />
+                                                        <Setter Property="Opacity" Value=".5" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+
+
+<Button x:Name="completeButton" Content="Complete" Command="{Binding GoDetailCommand}">
+                                        <Button.Style>
+                                            <Style x:Name="ButtonVisibility">
+                                                <Setter Property="Button.Visibility" Value="Hidden"/>
+                                                
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=IsSelected}" Value="True">
+                                                        <Setter Property="Button.Visibility" Value="Visible"/>
+                                                        
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+
+<Style TargetType="Button">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Setter Property="Opacity" Value=".5" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=IsSelected}" Value="True">
+                                                        <Setter Property="IsEnabled" Value="True" />
+                                                        <Setter Property="Opacity" Value="1" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>

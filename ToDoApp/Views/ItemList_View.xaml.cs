@@ -31,6 +31,12 @@ namespace ToDoApp.Views
 
         //}
     }
+
+    //public class MockRecord
+    //{
+    //    public string id { get; set; }
+    //    public string task { get; set; }
+    //}
 }
 
 //private bool _isEnabled;
@@ -126,21 +132,21 @@ namespace ToDoApp.Views
 
 
 
-    //<ListBox Grid.Row="1" Margin= "5" ItemsSource= "{Binding Items}" SelectionMode= "Single" >
-    //        < i:Interaction.Triggers>
-    //            <!-- This event trigger will execute the action when the corresponding event is raised by the ListBox. -->
-    //            <i:EventTrigger EventName = "SelectionChanged" >
-    //                < !--This action will invoke the selected command in the view model and pass the parameters of the event to it. -->
-    //                <prism:InvokeCommandAction Command = "{Binding SelectedCommand}" TriggerParameterPath= "AddedItems" />
-    //            </ i:EventTrigger>
-    //        </i:Interaction.Triggers>
-    //    </ListBox>
+//<ListBox Grid.Row="1" Margin= "5" ItemsSource= "{Binding Items}" SelectionMode= "Single" >
+//        < i:Interaction.Triggers>
+//            <!-- This event trigger will execute the action when the corresponding event is raised by the ListBox. -->
+//            <i:EventTrigger EventName = "SelectionChanged" >
+//                < !--This action will invoke the selected command in the view model and pass the parameters of the event to it. -->
+//                <prism:InvokeCommandAction Command = "{Binding SelectedCommand}" TriggerParameterPath= "AddedItems" />
+//            </ i:EventTrigger>
+//        </i:Interaction.Triggers>
+//    </ListBox>
 
 
 
-    //<StackPanel Grid.Row= "2" Margin= "5" Orientation= "Horizontal" >
-    //        < TextBlock Foreground= "DarkRed" FontWeight= "Bold" > Selected Item:</TextBlock>
-    //        <TextBlock AutomationProperties.AutomationId= "SelectedItemTextBlock" Foreground= "DarkRed" FontWeight= "Bold" Margin= "5,0" Text= "{Binding SelectedItemText}" />
-    //    </ StackPanel >
+//<StackPanel Grid.Row= "2" Margin= "5" Orientation= "Horizontal" >
+//        < TextBlock Foreground= "DarkRed" FontWeight= "Bold" > Selected Item:</TextBlock>
+//        <TextBlock AutomationProperties.AutomationId= "SelectedItemTextBlock" Foreground= "DarkRed" FontWeight= "Bold" Margin= "5,0" Text= "{Binding SelectedItemText}" />
+//    </ StackPanel >
 
 
