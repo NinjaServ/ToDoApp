@@ -45,12 +45,10 @@ namespace ToDoApp.Views
 
 
             _region = _regionManager.Regions["ContentRegion"];
-            var view = _container.Resolve<ItemList_View>();
-            //var view = _container.Resolve<AddItem_View>(); 
-            _region.Add(view);
+            //var view = _container.Resolve<ItemList_View>();
+                //var view = _container.Resolve<AddItem_View>(); 
+            //_region.Add(view);
 
-            //var view2 = _container.Resolve<AddItem_View>();
-            //_region.RequestNavigate(new Uri("AddItem_View", UriKind.Relative));
         }
 
         public void NavigateToView(object sender, RoutedEventArgs e)

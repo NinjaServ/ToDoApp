@@ -1,0 +1,106 @@
+﻿
+
+C# snippets  
+ctor: Default constructor
+prop: Property
+propg: Read only property
+sim: static int main method
+svm: static void main method
+~:	Destructor 
+	
+try
+if
+else
+for
+foreach
+mbox - Message box stub
+
+http://www.developer.com/net/net/article.php/3557701/Introducing-Visual-Studio-2005-IntelliSense-Code-Snippets.htm
+
+#if		Creates a #if directive and a #endif directive
+#region	Creates a #region directive and a #endregion directive
+~		Creates a destructor for the containing class
+attribute	Creates a declaration for a class that derives from Attribute
+checked	Creates a checked block
+class	Creates a class declaration
+ctor	Creates a constructor for the containing class
+cw		Creates a call to WriteLine
+do		Creates a do while loop
+else	Creates an else block
+enum	Creates an enum declaration
+equals	Creates a method declaration that overrides the Equals method defined in the Object class
+exception	Creates a declaration for a class that derives from an exception (Exception by default)
+for		Creates a for loop
+foreach	Creates a foreach loop
+forr	Creates a for loop that decrements the loop variable after each iteration
+if		Creates an if block
+indexer	Creates an indexer declaration
+interface	Creates an interface declaration
+invoke	Creates a block that safely invokes an event
+iterator	Creates an iterator
+iterindex	Creates a "named" iterator and indexer pair by using a nested class
+lock	Creates a lock block
+mbox	Creates a call to System.Windows.Forms.MessageBox.Show (You may need to add a reference to System.Windows.Forms.dll.)
+namespace	Creates a namespace declaration
+prop	Creates a property declaration and a backing field
+propg	Creates a property declaration with only a "get" accessor and a backing field
+sim		Creates a static int Main method declaration
+struct	Creates a struct declaration
+svm		Creates a static void Main method declaration
+switch	Creates a switch block
+try		Creates a try-catch block
+tryf	Creates a try-finally block
+unchecked	Creates an unchecked block
+unsafe	Creates an unsafe block
+using	Creates a using directive
+while	Creates a while loop
+
+
+http://www.nbdtech.com/Free/WpfBinding.pdf
+
+DataContext="ItemList_ViewModel"
+DataContext="{Binding RelativeSource={RelativeSource Self}}"
+IsChecked="{Binding ConfigurationModel.UseSensorLength, Mode=TwoWay}"
+IsEnabled="{Binding ConfigurationModel.DontUseSensorLength}" 
+<TextBox Name="TextBox" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UCName:UCName}}, Path=DP1, Mode=TwoWay}"/>
+
+
+
+<MainWindow DataContext="mainViewModel">
+ <local:TestControl ucDependProp="{Binding viewModelProp}/>
+</MainWindow>
+
+className: TestControl.xaml
+<UserControl Name="thisControl">
+<TextBox Text="{Binding ElementName=thisControl, Path=ucDependProp}/>
+</UserControl>
+
+
+
+using Microsoft.TeamFoundation.MVVM
+            //IDialogService.ShowDialog<string>;
+            //IDialogService.ShowDialog;
+            //IDialogService.Show;
+            //Func<INotifyPropertyChanged, Type>
+            //     md:DialogServiceViews.IsRegistered = "True"
+
+                //MyNamespace.ViewModels.MyDialogViewModel => MyNamespace.Views.MyDialog, or default locator can be overridden by specifying implementation in the constructor of DialogService
+        
+
+   private readonly IDialogService dialogService;
+
+        public ModalDialogTabContentViewModel(IDialogService dialogService)
+        {
+            this.dialogService = dialogService;
+        }
+
+        private void ShowDialog()
+        {
+            var dialogViewModel = new AddTextDialogViewModel();
+
+            bool? success = dialogService.ShowDialog<AddTextDialog>(this, dialogViewModel));
+            if (success == true)
+            {
+                Texts.Add(dialogViewModel.Text);
+            }
+        }

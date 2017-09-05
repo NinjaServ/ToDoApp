@@ -45,6 +45,8 @@ namespace ToDoApp.ViewModels
             System.Windows.MessageBox.Show(String.Format("Navigation to {0} complete. ", result.Context.Uri));
         }
 
+        
+
         //public IList<string> listProperty { get; set; }
 
         //internal ObservableCollection<ToDoItem> _ToDoItemList;

@@ -25,11 +25,11 @@ namespace ToDoApp.Views
             InitializeComponent();
         }
 
-        private void addItem_Click(object sender, RoutedEventArgs e)
-        {
+        //private void addItem_Click(object sender, RoutedEventArgs e)
+        //{
 
 
-        }
+        //}
     }
 }
 

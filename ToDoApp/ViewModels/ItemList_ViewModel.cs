@@ -3,22 +3,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.ComponentModel;
+using System.Windows.Data;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
+using Prism.Events;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using ToDoApp.Models;
 using ToDoApp.Views;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ToDoApp.ViewModels
 {
 
-    public partial class ItemList_ViewModel : BindableBase
+    public partial class ItemList_ViewModel : BindableBase, INavigationAware
     {
         IRegionManager _regionManager;
         IRegionNavigationJournal _journal;
+        IRegionNavigationService _navService;
 
         public IList<string> listProperty { get; set; }
 
@@ -29,7 +34,11 @@ namespace ToDoApp.ViewModels
             set { SetProperty(ref _ToDoItemList, value); }
         }
 
-        public DelegateCommand<ToDoItem> ItemSelectedCommand { get; private set; }
+        public ICollectionView ItemsCV { get; private set; }
+        private readonly IEventAggregator eventAggregator;
+
+
+        //public DelegateCommand<ToDoItem> ItemSelectedCommand { get; private set; }
         public DelegateCommand GoAddItemCommand { get; set; }
         public DelegateCommand GoDetailCommand { get; set; }
         public DelegateCommand GoStatsCommand { get; set; }
@@ -47,28 +56,63 @@ namespace ToDoApp.ViewModels
 
             _regionManager = regionManager;
 
-            ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
+            //ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
             CreateItems();
 
+            // Initialize the CollectionView for the underlying model
+            // and track the current selection.
+            this.ItemsCV = new ListCollectionView(ToDoItemList);
+            this.ItemsCV.CurrentChanged += new EventHandler(this.ItemSelected); //SelectedItemChanged
+
+
             //Command to navigate to AddItem_View
-            GoAddItemCommand = new DelegateCommand(GoForward, CanGoForward);
+            GoAddItemCommand = new DelegateCommand(GoAddItem, () => true);
             //Command to navigate to ItemDetail_View
-            GoDetailCommand = new DelegateCommand(GoForward, CanGoForward);
-            GoStatsCommand = new DelegateCommand(() => new IMessage("My Test Message", "A test title"),
-                            CanGoForward);
+            GoDetailCommand = new DelegateCommand(GoItemDetails, () => true); //CanGoForward
+            //GoStatsCommand = new DelegateCommand(() => new IMessage("My Test Message", "A test title"),
+            //                ()=>true);
+            GoStatsCommand = new DelegateCommand(GoForward, CanGoForward); 
+                //GoMessage, () => true);
 
-
+            //this.eventAggregator.GetEvent<PubSubEvent<int>>().Subscribe(this.ItemSelectedEvent, true);
         }
 
-        private void ItemSelected(ToDoItem item)
+
+        //private void ItemSelected(ToDoItem item)
+        private void ItemSelected(object sender, EventArgs e)
         {
-            var parameters = new NavigationParameters();
-            parameters.Add("ToDoItem", item);
+            ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+            //var it = (ListCollectionView)sender.InternalList.CurrentItem as ToDoItem;
+
+            if (item != null)
+            {
+                var parameters = new NavigationParameters();
+                parameters.Add("ToDoItem", item);
+            }
 
             //ItemDetail_View needs to know the selected item from the DataGrid "ToDoList"
-            if (item != null)
-                _regionManager.RequestNavigate("ContentRegion", "ItemDetail_View", parameters);
+            //if (item != null)
+            //    _regionManager.RequestNavigate("ContentRegion", "ItemDetail_View", parameters);
         }
+
+        private void SelectedItemChanged(object sender, EventArgs e)
+        {
+            ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+            if (item != null)
+            {
+                // Publish the EmployeeSelectedEvent event.
+                this.eventAggregator.GetEvent<PubSubEvent<int>>().Publish(item.id);
+            }
+        }
+
+        private void ItemSelectedEvent(int id)
+        {
+            if (id == 0) return;
+
+            // Get the employee entity with the selected ID.
+            ToDoItem selectedEmployee = this.ToDoItemList.FirstOrDefault(item => item.id == id);
+        }
+
 
         //Test method for itemList population - can migrate to Unit Test
         private void CreateItems()
@@ -84,13 +128,46 @@ namespace ToDoApp.ViewModels
             _ToDoItemList = itemList;
         }
 
-        public void OnNavigatedTo(NavigationContext navigationContext)
+        private void GoAddItem()
         {
-            //Log Navigation event in the journal 
-            _journal = navigationContext.NavigationService.Journal;
-            //Change command status
-            GoAddItemCommand.RaiseCanExecuteChanged();
+            _regionManager.RequestNavigate("ContentRegion", "AddItem_View");
+
+            //IRegion contentRegion = _regionManager.Regions["ContentRegion"];
+            //contentRegion.RequestNavigate(new Uri("AddItem_View", UriKind.Relative));
         }
+
+        private void GoItemDetails()
+        {
+            ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+            
+            if (item != null)
+            {
+                var parameters = new NavigationParameters();
+                parameters.Add("ToDoItem", item);
+
+                //ItemDetail_View needs to know the selected item from the DataGrid "ToDoList"
+                _regionManager.RequestNavigate("ContentRegion", "ItemDetail_View", parameters);
+            }
+        }
+
+        private void GoMessage()
+        {
+            IMessage message = new IMessage("My Test Message", "A test title");
+
+            //message(this, new MessageReceivedEventArgs(contact, message)); 
+
+            //var handler = this.MessageReceived;
+            //if (handler != null)
+            //{
+            //    handler(this, new MessageReceivedEventArgs(contact, message));
+            //}
+        }
+
+        //private void OnMessageReceived(object sender, MessageReceivedEventArgs a)
+        //{
+        //    this.showReceivedMessageRequest.Raise(a.Message);
+        //}
+
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
@@ -101,6 +178,21 @@ namespace ToDoApp.ViewModels
         {
 
         }
+
+        public void OnNavigatingTo(NavigationContext navigationContext)
+        {
+
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            _navService = navigationContext.NavigationService;
+            //Get Navigation journal reference
+            _journal = navigationContext.NavigationService.Journal;
+            //Change command status
+            GoAddItemCommand.RaiseCanExecuteChanged();
+        }
+
 
         //Navigate backwards based on the journal
         private void GoBack()
@@ -118,6 +210,7 @@ namespace ToDoApp.ViewModels
         private bool CanGoForward()
         {
             return _journal != null && _journal.CanGoForward;
+            //return true;
         }
 
         ~ItemList_ViewModel()
