@@ -16,15 +16,16 @@ using Prism.Mvvm;
 
 namespace ToDoApp.Infrastructure
 {
-    class ToDoList_Service : BindableBase, IToDoList_Service
+    public class ToDoList_Service : BindableBase, IToDoList_Service
     {
         private const string File_Path_JSON = @"./Data/ToDoListData.json";
         private const string File_Path_Settings = @"./Data/SettingsData.json";
 
-        enum keyEnum
+        struct keySet
         {
-            item_counter, text_file, text_file_path, settings_file_path;
-        }
+            public const string item_counter = "item_counter", text_file = "text_file", 
+                text_file_path = "text_file_path", settings_file_path = "settings_file_path";
+        };
 
 
         private ToDoListCollection _toDoList;
@@ -41,12 +42,28 @@ namespace ToDoApp.Infrastructure
             }
         }
 
-        private Dictionary<string, string> settings { get; set; }
+        private SettingsDictionary settings { get; set; }
         //public Dictionary<string, string> settings  { get; set; }
 
         public ToDoList_Service()
         {
+            settings = new SettingsDictionary();
+            if (SettingsFile_Check())
+                SettingsFile_Load();
+            else
+            {
+                Initialize_Settings();
+                SettingsFile_Save();
+            }
+
             _toDoList = new ToDoListCollection();
+            if (DataFile_Check())
+                DataFile_Load();
+            else
+            {
+                Initialize_Settings();
+                DataFile_Save();
+            }
 
         }
 
@@ -54,24 +71,37 @@ namespace ToDoApp.Infrastructure
         {
             if (settings != null)
             {
-                settings.Add("item_counter", "1");
-                settings.Add("text_file", "1");
-                settings.Add("text_file_path", File_Path_JSON);
-                settings.Add("settings_file_path", File_Path_Settings);
+                settings.Add(keySet.item_counter, "1");
+                settings.Add(keySet.text_file, "1");
+                settings.Add(keySet.text_file, File_Path_JSON);
+                settings.Add(keySet.settings_file_path, File_Path_Settings);
             }
             else
             {
-
                 return false;
             }
             return true;
         }
+
+        public bool Initialize_ToDoList()
+        {
+            if (ToDoList != null)
+            {
+                ToDoList.CreateTestItems();
+                return true;
+            }
+
+            return false;
+        }
+
+
 
         public bool SaveToDoItem(ToDoItem toDoItem)
         {
             if (!_toDoList.Contains(toDoItem))
             {
                 _toDoList.Add(toDoItem);
+                DataFile_Save();
             }
             else
             {
@@ -83,65 +113,90 @@ namespace ToDoApp.Infrastructure
 
 
 
-        private bool SaveFile_Check()
+        private bool DataFile_Check()
+        {
+            string filePath = File_Path_JSON;
+            return (File.Exists(filePath));
+        }
+
+        private bool DataFile_Save()
         {
             bool result = false;
+
+            try
+            {
+                ToDoListIO.Save(ToDoList);
+                result = true;
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("File Save Error, Exception: {0}", e.Message);
+            }
 
             return result;
         }
 
-        private bool SaveFile_Save()
+        private bool DataFile_Load()
         {
             bool result = false;
 
-            return result;
-        }
-
-        private bool SaveFile_Load()
-        {
-            bool result = false;
+            try
+            {
+                ToDoListCollection listCollection = ToDoListIO.Load();
+                if (listCollection != null)
+                {
+                    ToDoList = listCollection;
+                    result = true;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Exception: {0} \nFile Load Error", e.Message);
+            }
 
             return result;
         }
 
         private bool SettingsFile_Check()
         {
-            bool result = false;
-
-            return result;
+            string filePath = File_Path_Settings;
+            return (File.Exists(filePath));
         }
 
         private bool SettingsFile_Save()
         {
             bool result = false;
 
-            return result;
-        }
-
-        private bool File_Load()
-        {
-            bool result = false;
-
-            return result;
-        }
-
-        private bool File_Check()
-        {
-            bool result = false;
-
-            return result;
-        }
-
-        private bool File_Save()
-        {
-            bool result = false;
-
+            try
+            {
+                SettingsIO.Save(settings);
+                result = true;
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Exception: {0} \nFile Save Error", e.Message);
+            }
+    
             return result;
         }
 
         private bool SettingsFile_Load()
         {
             bool result = false;
+
+            try
+            {
+                SettingsDictionary settingsDict = SettingsIO.Load();
+                if (settingsDict != null)
+                {
+                    settings = settingsDict;
+                    result = true;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Exception: {0} \nFile Load Error", e.Message);
+            }
 
             return result;
         }
@@ -188,10 +243,37 @@ namespace ToDoApp.Infrastructure
             return null; 
         }
 
+        class SettingsIO : FileIO<SettingsDictionary>
+        {
+            public SettingsDictionary setDictionary { get; set; }
+
+            public void Save()
+            {
+                this.Save(File_Path_Settings);
+            }
+        }
+
+        class ToDoListIO : FileIO<ToDoListCollection>
+        {
+            public ToDoListCollection listCollection { get; set; }
+
+            public void Save()
+            {
+                this.Save(File_Path_JSON);
+            }
+        }
 
     }
 
-    public class FileSaver<T> where T : new()
+    class SettingsDictionary: Dictionary<string,string>
+    {
+        public SettingsDictionary()
+        {
+
+        }
+    }
+
+    public class FileIO<T> where T : new()
     {
         private const string DEFAULT_FILENAME = "data.json";
 
