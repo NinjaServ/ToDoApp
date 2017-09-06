@@ -42,11 +42,11 @@
             <TextBlock Text="Today : " TextWrapping="Wrap" Grid.Row="5" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF2F3806" Margin="8,8,8,8" />
             <TextBlock Text="Due Date : " TextWrapping="Wrap" Grid.Row="6" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF2F3806" Margin="8,8,8,8" />
 
-            <TextBox x:Name="taskTextBox" Text="Task" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" Height="20" Margin="1,1,1,1"/>
-            <TextBox x:Name="detailTextBox" Text="Details" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="1,1,1,1"/>
+            <TextBox x:Name="taskTextBox" Text="Task" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" Height="20" Margin="1,1,1,1" SpellCheck.IsEnabled="True"/>
+            <TextBox x:Name="detailTextBox" Text="Details" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="1,1,1,1" SpellCheck.IsEnabled="True"/>
             <TextBlock Text="{Binding todayDate, StringFormat=MM/dd/yyyy}"  TextWrapping="Wrap" Grid.Row="5" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF46f078" Margin="8,8,8,8" />
             <DatePicker Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" Margin="1,1,0,0" VerticalAlignment="Center"/>
-            <Button x:Name="submitButton" Content="Submit" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="75" Command="{Binding GoBackCommand}" />
+            <Button x:Name="submitButton" Content="Submit" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="75" Command="{Binding SaveCommand}" />
             <Button x:Name="cancelButton" Content="Cancel" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,80,0.2" VerticalAlignment="Bottom" Width="75" Command="{Binding GoBackCommand}" />
         </Grid>
     </Grid>

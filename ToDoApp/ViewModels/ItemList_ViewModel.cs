@@ -12,9 +12,10 @@ using Prism.Events;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+
+using ToDoApp.Infrastructure;
 using ToDoApp.Models;
 using ToDoApp.Views;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ToDoApp.ViewModels
 {
@@ -27,6 +28,8 @@ namespace ToDoApp.ViewModels
 
         internal string _filterString;
         public IList<string> listProperty { get; set; }
+
+        IToDoList_Service _ToDoItemListService;
 
         internal ObservableCollection<ToDoItem> _ToDoItemList;
         public ObservableCollection<ToDoItem> ToDoItemList
@@ -53,12 +56,15 @@ namespace ToDoApp.ViewModels
 
         //}
 
-        public ItemList_ViewModel(RegionManager regionManager)
+        public ItemList_ViewModel(RegionManager regionManager, IToDoList_Service toDoListService)
         {
             //View discovery
             //this.regionManager.RegisterViewWithRegion("ContentRegion", typeof(ItemList_View));
 
             _regionManager = regionManager;
+            _ToDoItemListService = toDoListService;
+
+            //_ToDoItemListService.SaveToDoItem();
 
             //ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
             CreateItems();
@@ -134,7 +140,7 @@ namespace ToDoApp.ViewModels
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
             if (item != null)
             {
-                // Publish the EmployeeSelectedEvent event.
+                // Publish the SelectedEvent event.
                 this.eventAggregator.GetEvent<PubSubEvent<int>>().Publish(item.id);
             }
         }

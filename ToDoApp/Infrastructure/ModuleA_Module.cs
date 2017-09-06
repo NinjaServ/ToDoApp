@@ -29,6 +29,8 @@ namespace ToDoApp.Infrastructure
 
         public void Initialize()
         {
+            _container.RegisterType<IToDoList_Service, ToDoList_Service>(new ContainerControlledLifetimeManager());
+
             _container.RegisterTypeForNavigation<ItemList_View>();   //ItemList_View
             _container.RegisterTypeForNavigation<AddItem_View>();   //AddItem_View
             _container.RegisterTypeForNavigation<ItemDetail_View>();   //ItemDetail_View

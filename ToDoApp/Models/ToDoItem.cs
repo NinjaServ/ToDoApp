@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 //Add reference to System.Web.Extensions 
 using System.Web.Script.Serialization;
 //using Newtonsoft.Json;
 using System.IO;
 
+
 namespace ToDoApp.Models
 {
-    public class ToDoItem
+    public class ToDoItem : ICloneable, IDataErrorInfo
     {
-        public static int counter = 1; 
+        public static int counter = 1;
 
         public int id { get; set; }
         public string task { get; set; }
@@ -28,6 +30,7 @@ namespace ToDoApp.Models
             get { return this._log; }
             set { this._log = value; }
         }
+
 
         /// <summary>
         /// Default constructor for ToDoItem. Creates empty ToDoItem.
@@ -69,6 +72,21 @@ namespace ToDoApp.Models
         }
 
         /// <summary>
+        /// Parameterized Constructor
+        /// </summary>
+        /// <param name="aTask">Value for the Task string</param>
+        /// <param name="aDetail">Value for the Detail string</param>
+        public ToDoItem(int aID, string aTask, string aDetail, DateTime aCreateDate, DateTime aDueDate, DateTime aCompleteDate)
+        {
+            this.id = aID;
+            this.task = aTask;
+            this.detail = aDetail;
+            this.createDate = aCreateDate;
+            this.dueDate = aDueDate;
+            this.completeDate = aCompleteDate;
+        }
+
+        /// <summary>
         /// Set intial values for class members
         /// </summary>
         private void setDefaults()
@@ -79,6 +97,8 @@ namespace ToDoApp.Models
             createDate = DateTime.Now;
             dueDate = this.createDate.AddDays(1.0);
             completeDate = new DateTime();
+            completeDate = new DateTime(0);
+            completeDate = DateTime.MinValue;
         }
 
 
@@ -128,92 +148,62 @@ namespace ToDoApp.Models
         }
 
 
-        //Json.Net, see example below:
-        //public void Write_JSON_NET()
-        //{
-        //    List<Person> _data = new List<Person>();
-        //    _data.Add(new Person()
-        //    {
-        //        PersonID = 1,
-        //        Name = "A Message",
-        //        Registered = false
-        //    });
-
-        //    string json = JsonConvert.SerializeObject(_data.ToArray());
-
-        //    //write string to file
-        //    System.IO.File.WriteAllText(@"C:\Atest\path.JSON", json);
-
-        //    //open file stream
-        //    using (StreamWriter file = File.CreateText(@"C:\Atest\path.txt"))
-        //    {
-        //        JsonSerializer serializer = new JsonSerializer();
-        //        //serialize object directly into file stream
-        //        serializer.Serialize(file, _data);
-        //    }
-
-        //    string json_fmt = JsonConvert.SerializeObject(_data.ToArray(), Formatting.Indented);
-
-        //    Person person = new Person()
-        //    {
-        //        PersonID = 1,
-        //        Name = "A Message",
-        //        Registered = false
-        //    };
-
-        //    string json_fmt2 = JsonConvert.SerializeObject(person, Formatting.Indented);
-        //    File.WriteAllText(@"c:\Atest\person.json", json_fmt2);
-
-
-        //    using (FileStream fs = File.Open(@"c:\Atest\person2.json", FileMode.CreateNew))
-        //    using (StreamWriter sw = new StreamWriter(fs))
-        //    using (JsonWriter jw = new JsonTextWriter(sw))
-        //    {
-        //        jw.Formatting = Formatting.Indented;
-
-        //        JsonSerializer serializer = new JsonSerializer();
-        //        serializer.Serialize(jw, person);
-
-        //        string json_ser = JsonConvert.SerializeObject(_data.ToArray(), Formatting.Indented);
-
-
-        //    }
-        //}
-
-        public void Write_JSS()
+        object ICloneable.Clone()
         {
-
-            var RegisteredUsers = new List<Person>();
-            RegisteredUsers.Add(new Person() { PersonID = 1, Name = "Bryon Hetrick", Registered = true });
-            RegisteredUsers.Add(new Person() { PersonID = 2, Name = "Nicole Wilcox", Registered = true });
-            RegisteredUsers.Add(new Person() { PersonID = 3, Name = "Adrian Martinson", Registered = false });
-            RegisteredUsers.Add(new Person() { PersonID = 4, Name = "Nora Osborn", Registered = false });
-
-            var serializer = new JavaScriptSerializer();
-            var serializedResult = serializer.Serialize(RegisteredUsers);
-            // Produces string value of:
-            // [
-            //     {"PersonID":1,"Name":"Bryon Hetrick","Registered":true},
-            //     {"PersonID":2,"Name":"Nicole Wilcox","Registered":true},
-            //     {"PersonID":3,"Name":"Adrian Martinson","Registered":false},
-            //     {"PersonID":4,"Name":"Nora Osborn","Registered":false}
-            // ]
-
-            var deserializedResult = serializer.Deserialize<List<Person>>(serializedResult);
-
-            // Produces List with 4 Person objects
-
+            return this.MemberwiseClone();
         }
 
-    }
+        public ToDoItem DeepCopy()
+        {
+            ToDoItem other = (ToDoItem)this.MemberwiseClone();
+            other.task = String.Copy(task);
+            other.detail = String.Copy(detail);
+
+            return other;
+        }
 
 
-    public class Person
-    {
-        public int PersonID { get; set; }
-        public string Name { get; set; }
-        public bool Registered { get; set; }
-    }
+        #region IDataErrorInfo Interface
+        
+        public string Error
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = null;
+
+                switch (columnName)
+                {
+                    case "id":
+                        if (id == 0)
+                            error = "Unique id required";
+                        break;
+                    case "task":
+                        if (!DataValidator.StringIsText(task) && !DataValidator.TextIsSentences(task))
+                        {
+                            error = "Task text invalid";
+                        }
+                        break;
+                    case "detail":
+                        if (!DataValidator.StringIsText(detail) && !DataValidator.TextIsParagraphs(detail))
+                        {
+                            error = "Task text invalid";
+                        }
+                        break;
+                }
+                return error; 
+            }
+        }
+
+        #endregion
+    }  
 }
 
 
@@ -233,11 +223,5 @@ namespace ToDoApp.Models
 //	a deadline date, 
 //	a completed flag, and
 //    an optional "more details" field that allows for more details to be given(again, a single large text area is fine for this). 
-
-
-
-
-
-
 
 

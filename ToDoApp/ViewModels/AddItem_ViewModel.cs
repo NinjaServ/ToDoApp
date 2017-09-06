@@ -18,13 +18,15 @@ namespace ToDoApp.ViewModels
     {
 
         public DateTime todayDate { get; set; } = DateTime.Now;
+        public bool savedItem { get; set; }
 
         IRegionManager _regionManager;
         IRegionNavigationJournal _journal;
 
         public DelegateCommand<ToDoItem> ItemSelectedCommand { get; private set; }
-        public DelegateCommand GoForwardCommand { get; set; }
+        //public DelegateCommand GoForwardCommand { get; set; }
         public DelegateCommand GoBackCommand { get; set; }
+        public DelegateCommand SaveCommand { get; set; }
 
 
         private string _title = "ToDo Application - Add Item";
@@ -32,6 +34,13 @@ namespace ToDoApp.ViewModels
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
+        }
+
+        private ToDoItem _newItem;
+        public ToDoItem newItem
+        {
+            get { return _newItem; }
+            set { SetProperty(ref _newItem, value); }
         }
 
 
@@ -60,10 +69,10 @@ namespace ToDoApp.ViewModels
             _regionManager = regionManager;
 
             ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
-            CreateItems();
-
-            GoForwardCommand = new DelegateCommand(GoForward, CanGoForward);
+      
+            //GoForwardCommand = new DelegateCommand(GoForward, CanGoForward);
             GoBackCommand = new DelegateCommand(GoBack);
+            SaveCommand = new DelegateCommand(SaveItem, CanSaveItem);
         }
 
         private void ItemSelected(ToDoItem item)
@@ -75,18 +84,29 @@ namespace ToDoApp.ViewModels
                 _regionManager.RequestNavigate("ContentRegion", "ItemList_View", parameters);
         }
 
-        private void CreateItems()
+        private void SaveItem()
         {
-            var itemList = new ObservableCollection<ToDoItem>();
-            itemList.Add(new ToDoItem("Item1", "These are Details 1", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("Item2", "These are Details 2", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("Item3", "These are Details 3", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("aItem4", "Oh Details 4", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("Item 5", "For 5 details are here", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("zItem6", "Some 6 details are ny", DateTime.Now, DateTime.Now.AddDays(1.0)));
-
-            _ToDoItemList = itemList;
+            if (_ToDoItemList != null)
+            {
+                _ToDoItemList.Add(newItem);
+                savedItem = true;
+                GoBack();
+            }
+            else
+                savedItem = false; 
         }
+
+        private bool CanSaveItem()
+        {
+            if (_ToDoItemList != null && newItem.Error == null )
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
+
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
