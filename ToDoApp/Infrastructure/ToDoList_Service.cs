@@ -16,10 +16,10 @@ using Prism.Mvvm;
 
 namespace ToDoApp.Infrastructure
 {
-    class ToDoList_Service :  BindableBase, IToDoList_Service
+    class ToDoList_Service : BindableBase, IToDoList_Service
     {
-        static string File_Path_JSON = "./Data/ToDoListData.json";
-        static string File_Path_Settings = "./Data/SettingsData.json";
+        private const string File_Path_JSON = @"./Data/ToDoListData.json";
+        private const string File_Path_Settings = @"./Data/SettingsData.json";
 
         enum keyEnum
         {
@@ -61,7 +61,7 @@ namespace ToDoApp.Infrastructure
             }
             else
             {
-                
+
                 return false;
             }
             return true;
@@ -85,7 +85,7 @@ namespace ToDoApp.Infrastructure
 
         private bool SaveFile_Check()
         {
-            bool result = false; 
+            bool result = false;
 
             return result;
         }
@@ -156,7 +156,7 @@ namespace ToDoApp.Infrastructure
          * 
          */
 
-        public void WriteFile_JSON(string filename)
+        public void WriteFile_JSON(string filePath)
         {
             var itemList = _toDoList.ToList<ToDoItem>();
 
@@ -164,45 +164,36 @@ namespace ToDoApp.Infrastructure
             {
                 var serializer = new JavaScriptSerializer();
                 var serializedResult = serializer.Serialize(itemList);
-                //    //write string to file
-//    System.IO.File.WriteAllText(@"C:\Atest\path.JSON", json);
+                //    write string to file
+                System.IO.File.WriteAllText(filePath, serializedResult);
             }
-            
-            var deserializedResult = serializer.Deserialize<List<Person>>(serializedResult);
-
-            // Produces List with 4 Person objects
-
-
-
         }
 
-        public void ReadFile_JSON()
+        public ToDoListCollection ReadFile_JSON(string filePath)
         {
             var itemList = _toDoList.ToList<ToDoItem>();
 
-            if (itemList.Count != 0)
+            if (File.Exists(filePath))
             {
-                var serializer = new JavaScriptSerializer();
-                var serializedResult = serializer.Serialize(itemList);
+                string data = System.IO.File.ReadAllText(filePath);
 
-                //    write string to file
-                System.IO.File.WriteAllText(@"C:\Atest\path.JSON", json);
+                var serializer = new JavaScriptSerializer();
+                var deserializedResult = serializer.Deserialize<List<ToDoItem>>(data);
+
+                ToDoListCollection aCollection = ToDoListCollection.ListToCollection(deserializedResult);
+
+                return aCollection;
             }
 
-
-
-            var deserializedResult = serializer.Deserialize<List<Person>>(serializedResult);
-
-            // Produces List with 4 Person objects
-
+            return null; 
         }
 
 
     }
 
-    public class AppSettings<T> where T : new()
+    public class FileSaver<T> where T : new()
     {
-        private const string DEFAULT_FILENAME = "settings.json";
+        private const string DEFAULT_FILENAME = "data.json";
 
         public void Save(string fileName = DEFAULT_FILENAME)
         {
@@ -231,64 +222,3 @@ namespace ToDoApp.Infrastructure
 // -- Use the Settings tab to create application settings. Visual Studio creates the file Settings.settings 
 // Properties.Settings.Default["SomeProperty"] = "Some Value";
 // Properties.Settings.Default.Save(); // Saves settings in application configuration file
-
-//public class Person
-//{
-//    public int PersonID { get; set; }
-//    public string Name { get; set; }
-//    public bool Registered { get; set; }
-//}
-
-
-//Json.Net, see example below:
-//public void Write_JSON_NET()
-//{
-//    List<Person> _data = new List<Person>();
-//    _data.Add(new Person()
-//    {
-//        PersonID = 1,
-//        Name = "A Message",
-//        Registered = false
-//    });
-
-//    string json = JsonConvert.SerializeObject(_data.ToArray());
-
-//    //write string to file
-//    System.IO.File.WriteAllText(@"C:\Atest\path.JSON", json);
-
-//    //open file stream
-//    using (StreamWriter file = File.CreateText(@"C:\Atest\path.txt"))
-//    {
-//        JsonSerializer serializer = new JsonSerializer();
-//        //serialize object directly into file stream
-//        serializer.Serialize(file, _data);
-//    }
-
-//    string json_fmt = JsonConvert.SerializeObject(_data.ToArray(), Formatting.Indented);
-
-//    Person person = new Person()
-//    {
-//        PersonID = 1,
-//        Name = "A Message",
-//        Registered = false
-//    };
-
-//    string json_fmt2 = JsonConvert.SerializeObject(person, Formatting.Indented);
-//    File.WriteAllText(@"c:\Atest\person.json", json_fmt2);
-
-
-//    using (FileStream fs = File.Open(@"c:\Atest\person2.json", FileMode.CreateNew))
-//    using (StreamWriter sw = new StreamWriter(fs))
-//    using (JsonWriter jw = new JsonTextWriter(sw))
-//    {
-//        jw.Formatting = Formatting.Indented;
-
-//        JsonSerializer serializer = new JsonSerializer();
-//        serializer.Serialize(jw, person);
-
-//        string json_ser = JsonConvert.SerializeObject(_data.ToArray(), Formatting.Indented);
-
-
-//    }
-//}
-
