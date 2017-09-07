@@ -77,7 +77,7 @@ namespace ToDoApp.ViewModels
 
             if( contentDirty )
             {
-                if (MessageBox.Show("Do you want to Exit without saving?", "Exit?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                if (MessageBox.Show("Do you want to Return without saving?", "Return?", MessageBoxButton.YesNo) == MessageBoxResult.No)
                     result = false;
             }
             

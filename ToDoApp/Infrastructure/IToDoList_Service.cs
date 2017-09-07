@@ -9,8 +9,11 @@ namespace ToDoApp.Infrastructure
 {
     public interface IToDoList_Service
     {
+        int GetItemCounterAndIncrement();
+
         ToDoListCollection GetToDoList();
         bool SyncToDoList();
+        bool AddItem(ToDoItem addItem); 
         bool ReplaceToDoItem(ToDoItem toDoItem, ToDoItem replacementItem); 
         bool DeleteToDoItem(ToDoItem toDoItem);
         bool SaveToDoItem(ToDoItem toDoItem);

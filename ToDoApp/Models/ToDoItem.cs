@@ -15,7 +15,7 @@ namespace ToDoApp.Models
 {
     public class ToDoItem : ICloneable, IDataErrorInfo
     {
-        public static int counter = 1;
+        //public static int counter = 1;
 
         public int id { get; set; }
         public string task { get; set; }
@@ -91,7 +91,7 @@ namespace ToDoApp.Models
         /// </summary>
         private void setDefaults()
         {
-            id = counter++;
+            id = -1;
             task = @"";
             detail = @"";
             createDate = DateTime.Now;
@@ -203,7 +203,25 @@ namespace ToDoApp.Models
         {
             get
             {
-                return null;
+                string error = null;
+
+                if (id == 0)
+                {
+                    error = "Unique id required";
+                }
+
+                if (!DataValidator.StringIsText(task) && !DataValidator.TextIsSentences(task))
+                {
+                    error = "Task text invalid";
+                }
+
+                if (!DataValidator.StringIsText(detail) && !DataValidator.TextIsParagraphic(detail))
+                {
+                    error = "Detail text invalid";
+                }
+
+                return error;
+
             }
         }
 
@@ -226,9 +244,9 @@ namespace ToDoApp.Models
                         }
                         break;
                     case "detail":
-                        if (!DataValidator.StringIsText(detail) && !DataValidator.TextIsParagraphs(detail))
+                        if ( !DataValidator.StringIsText(detail) && !DataValidator.TextIsParagraphic(detail))
                         {
-                            error = "Task text invalid";
+                            error = "Detail text invalid";
                         }
                         break;
                 }
@@ -259,7 +277,7 @@ namespace ToDoApp.Models
         //}
     }
 
-    
+
 
     //public static class ObjectExtensions
     //{

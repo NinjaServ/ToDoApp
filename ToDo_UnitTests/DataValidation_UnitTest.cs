@@ -3,6 +3,10 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using ToDoApp.Models;
+//using ToDoApp.Infrastructure;
+
+
 namespace ToDo_UnitTests
 {
     /// <summary>
@@ -59,11 +63,52 @@ namespace ToDo_UnitTests
         #endregion
 
         [TestMethod]
-        public void TestMethod1()
+        public void DataValidation_TextIsParagraphic_Test()
         {
-            //
-            // TODO: Add test logic here
-            //
+            string test_string = "This has sentences. It is in a paragraph format. There are $20 bills and 1.25% chances.   There are also whitespaces. ";
+            bool result = false;
+
+            result = DataValidator.StringIsText(test_string);
+            Assert.IsTrue(result, "String did not contain English text content.");
+
+            result = DataValidator.TextIsSentences(test_string);
+            Assert.IsTrue(result, "String did not match English sentence content.");
+
+            result = DataValidator.TextIsParagraphic(test_string);
+            Assert.IsTrue(result, "String did not match English paragraph content.");
+        }
+
+
+        [TestMethod]
+        public void DataValidation_TextIsNotParagraphic_Test()
+        {
+            string test_string = @"This has mixed content. !@#$%^&*()-=<>?:|,./;'[]\  ͢  alpha	α	beta	β	gamma	γ	delta	δ";
+            bool result = false;
+
+            result = DataValidator.StringIsText(test_string);
+            Assert.IsTrue(result, "String contains English text content.");
+
+            result = DataValidator.TextIsSentences(test_string);
+            Assert.IsFalse(result, "String contains English sentence content.");
+
+            result = DataValidator.TextIsParagraphic(test_string);
+            Assert.IsFalse(result, "String contains English paragraph content.");
+        }
+
+        [TestMethod]
+        public void DataValidation_TextIsEmpty_Test()
+        {
+            string test_string = @"";
+            bool result = false;
+
+            result = DataValidator.StringIsText(test_string);
+            Assert.IsFalse(result, "String is not empty.");
+
+            result = DataValidator.TextIsSentences(test_string);
+            Assert.IsFalse(result, "String matched English sentence content.");
+
+            result = DataValidator.TextIsParagraphic(test_string);
+            Assert.IsFalse(result, "String matched English paragraph content.");
         }
     }
 }

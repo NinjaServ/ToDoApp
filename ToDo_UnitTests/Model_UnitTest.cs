@@ -7,7 +7,7 @@ namespace ToDo_UnitTests
     public class Model_UnitTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void Model_TestMethod1()
         {
         }
     }

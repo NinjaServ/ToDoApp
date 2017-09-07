@@ -17,46 +17,69 @@ namespace ToDoApp.ViewModels
     public class AddItem_ViewModel : BindableBase, IConfirmNavigationRequest //INavigationAware,
     {
 
-        public DateTime todayDate { get; set; } = DateTime.Now;
-        public bool savedItem { get; set; }
-
         IRegionManager _regionManager;
         IRegionNavigationJournal _journal;
 
-        public DelegateCommand<ToDoItem> ItemSelectedCommand { get; private set; }
+        //public DelegateCommand<ToDoItem> ItemSelectedCommand { get; private set; }
         //public DelegateCommand GoForwardCommand { get; set; }
         public DelegateCommand GoBackCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
+        //public ObservableCollection<DateTime> dateCollection
+        //{
+        //    get { return DateTime.Now; }
+        //}
 
-        private string _title = "ToDo Application - Add Item";
-        public string Title
+        //ObjectDataProvider - ObjectInstance property
+
+        //public DateTime todayDate { get; set; } = DateTime.Now;
+        DateTime _todayDate;
+        public DateTime todayDate {
+            get { return DateTime.Now; }
+            set { SetProperty(ref _todayDate, value); } 
+        } 
+
+
+
+        bool _saveDirty;
+        public bool saveDirty
         {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
+            get { return _saveDirty; }
+            set { SetProperty(ref _saveDirty, value); }
         }
+
+        //private string _title = "ToDo Application - Add Item";
+        //public string Title
+        //{
+        //    get { return _title; }
+        //    set { SetProperty(ref _title, value); }
+        //}
 
         private ToDoItem _newItem;
         public ToDoItem newItem
         {
             get { return _newItem; }
-            set { SetProperty(ref _newItem, value); }
-        }
-
-
-        internal ObservableCollection<ToDoItem> _ToDoItemList;
-        public ObservableCollection<ToDoItem> ToDoItemList
-        {
-            get { return _ToDoItemList; }
             set
             {
-                SetProperty(ref _ToDoItemList, value);
-                //if (value != _ToDoItemList)
-                //{
-                //    _ToDoItemList = value;
-                //}
-            }
+                SetProperty(ref _newItem, value);
+                saveDirty = true;
+             }
         }
+
+
+        //internal ObservableCollection<ToDoItem> _ToDoItemList;
+        //public ObservableCollection<ToDoItem> ToDoItemList
+        //{
+        //    get { return _ToDoItemList; }
+        //    set
+        //    {
+        //        SetProperty(ref _ToDoItemList, value);
+        //        //if (value != _ToDoItemList)
+        //        //{
+        //        //    _ToDoItemList = value;
+        //        //}
+        //    }
+        //}
 
         IToDoList_Service _ToDoItemListService;
 
@@ -66,38 +89,41 @@ namespace ToDoApp.ViewModels
             _regionManager = regionManager;
             _ToDoItemListService = toDoListService;
 
+            _newItem = new ToDoItem();
 
-            ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
+
+            //ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
       
             //GoForwardCommand = new DelegateCommand(GoForward, CanGoForward);
             GoBackCommand = new DelegateCommand(GoBack);
             SaveCommand = new DelegateCommand(SaveItem, CanSaveItem);
         }
 
-        private void ItemSelected(ToDoItem item)
-        {
-            var parameters = new NavigationParameters();
-            parameters.Add("ToDoItem", item);
+        //private void ItemSelected(ToDoItem item)
+        //{
+        //    var parameters = new NavigationParameters();
+        //    parameters.Add("ToDoItem", item);
 
-            if (item != null)
-                _regionManager.RequestNavigate("ContentRegion", "ItemList_View", parameters);
-        }
+        //    if (item != null)
+        //        _regionManager.RequestNavigate("ContentRegion", "ItemList_View", parameters);
+        //}
 
         private void SaveItem()
         {
-            if (_ToDoItemList != null)
+            if (_ToDoItemListService != null)
             {
-                _ToDoItemList.Add(newItem);
-                savedItem = true;
+                _ToDoItemListService.AddItem(newItem);
+                saveDirty = false;
+                newItem = new ToDoItem();
                 GoBack();
             }
             else
-                savedItem = false; 
+                saveDirty = true; 
         }
 
         private bool CanSaveItem()
         {
-            if (_ToDoItemList != null && newItem.Error == null )
+            if (_newItem != null && newItem.Error == null )
             {
                 return true;
             }
@@ -111,6 +137,7 @@ namespace ToDoApp.ViewModels
         {
             _journal = navigationContext.NavigationService.Journal;
             //GoForwardCommand.RaiseCanExecuteChanged();
+            //_newItem = new ToDoItem();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -127,8 +154,11 @@ namespace ToDoApp.ViewModels
         {
             bool result = true;
 
-            if (MessageBox.Show("Do you want to Exit without saving?", "Navigate?", MessageBoxButton.YesNo) == MessageBoxResult.No) 
-                result = false;
+            if (saveDirty)
+            {
+                if (MessageBox.Show("Do you want to Return without saving?", "Return?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    result = false;
+            }
 
             continuationCallback(result);
 
@@ -169,7 +199,7 @@ namespace ToDoApp.ViewModels
 
         ~AddItem_ViewModel()
         {
-            _ToDoItemList = null;
+            //_ToDoItemList = null;
         }
     }
 }

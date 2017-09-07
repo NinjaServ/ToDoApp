@@ -2,9 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ToDoApp.Views"
-             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:src="clr-namespace:ToDoApp.ViewModels"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <!--xmlns:Height="400" Width="525">-->
+    
+    <UserControl.Resources>
+        <src:DateTime x:Key="myDataSource" Date="Today"/>
+        <src:todayDate x:Key="aDate"/>
+    </UserControl.Resources> 
+    
     <Grid>
         <!--<ContentControl prism:RegionManager.RegionName="ContentRegion" />-->
         <Grid Margin="0,0,0.4,-0.2">
@@ -42,10 +49,11 @@
             <TextBlock Text="Today : " TextWrapping="Wrap" Grid.Row="5" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF2F3806" Margin="8,8,8,8" />
             <TextBlock Text="Due Date : " TextWrapping="Wrap" Grid.Row="6" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF2F3806" Margin="8,8,8,8" />
 
-            <TextBox x:Name="taskTextBox" Text="Task" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" Height="20" Margin="1,1,1,1" SpellCheck.IsEnabled="True"/>
-            <TextBox x:Name="detailTextBox" Text="Details" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="1,1,1,1" SpellCheck.IsEnabled="True"/>
-            <TextBlock Text="{Binding todayDate, StringFormat=MM/dd/yyyy}"  TextWrapping="Wrap" Grid.Row="5" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF46f078" Margin="8,8,8,8" />
-            <DatePicker Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" Margin="1,1,0,0" VerticalAlignment="Center"/>
+            <TextBox x:Name="taskTextBox" Text="{Binding newItem.task, Mode=TwoWay, ValidatesOnDataErrors=True}" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" Height="20" Margin="1,1,1,1" SpellCheck.IsEnabled="True" />
+            <TextBox x:Name="detailTextBox" Text="{Binding newItem.detail, Mode=TwoWay, ValidatesOnDataErrors=True}" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="1,1,1,1" SpellCheck.IsEnabled="True"/>
+            <TextBlock Text="{Binding todayDate, StringFormat=MM/dd/yyyy, Mode=OneWay}"
+                       TextWrapping="Wrap" Grid.Row="5" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF46f078" Margin="8,8,8,8" />
+            <DatePicker Text="{Binding newItem.dueDate, Mode=TwoWay}" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" Margin="1,1,0,0" VerticalAlignment="Center"/>
             <Button x:Name="submitButton" Content="Submit" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="75" Command="{Binding SaveCommand}" />
             <Button x:Name="cancelButton" Content="Cancel" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,80,0.2" VerticalAlignment="Bottom" Width="75" Command="{Binding GoBackCommand}" />
         </Grid>

@@ -69,6 +69,19 @@ namespace ToDoApp.Infrastructure
 
         }
 
+        ~ToDoList_Service()
+        {
+            if (settings != null)
+                SettingsFile_Save();
+            //if (ToDoList != null)
+            //    DataFile_Save();
+
+            settings = null;
+            ToDoList = null;
+
+        }
+
+
         public bool Initialize_Settings()
         {
             if (settings != null)
@@ -119,22 +132,59 @@ namespace ToDoApp.Infrastructure
             return ToDoList;
         }
 
-        public bool SyncToDoList()
+        public int GetItemCounter()
         {
-            bool result;
+            var value = settings[keySet.item_counter];
+            int count = -1;
+            bool result = int.TryParse(value, out count);
+            int cnt = Convert.ToInt32(value); 
+      
+            return count;
+        }
 
-            if (DataFile_Check())
+        public bool ItemCounterIncrement()
+        {
+            bool result = false;
+
+            int count = GetItemCounter();
+            if (count < int.MaxValue)
             {
-                DataFile_Save();
-                result = true;
+                count++;
+                result = true; 
             }
-            else
-            {
-                return false;
-            }
+
+            var value = count.ToString();
+            settings[keySet.item_counter] = value;
+            Sync_Settings(); 
 
             return result;
         }
+
+        public int GetItemCounterAndIncrement()
+        {
+            int count = GetItemCounter();
+            bool result = ItemCounterIncrement();
+           
+            return count;
+        }
+
+        
+        public bool AddItem(ToDoItem addItem)
+        {
+            bool result = false;
+            if(addItem != null && addItem.Error == null)
+            {
+                int counter = GetItemCounterAndIncrement();
+                addItem.id = counter;
+                ToDoList.Add(addItem);
+                SyncToDoList();
+                result = true; 
+            }
+           
+            return result ;
+        }
+
+       
 
         public bool ReplaceToDoItem(ToDoItem toDoItem, ToDoItem replacementItem)
         {
@@ -195,10 +245,33 @@ namespace ToDoApp.Infrastructure
             return true;
         }
 
+
+        public bool SyncToDoList()
+        {
+            bool result;
+
+            if (DataFile_Check())
+            {
+                DataFile_Save();
+                result = true;
+            }
+            else
+            {
+                return false;
+            }
+
+            return result;
+        }
+
+
+
+
+
+
         private bool DirectoryCheck()
         {
             // Specify the directory you want to manipulate.
-            string path = @".\Data\";
+            //string path = @".\Data\";
 
             try
             {
@@ -211,7 +284,7 @@ namespace ToDoApp.Infrastructure
 
                 // Try to create the directory.
                 DirectoryInfo dir = Directory.CreateDirectory(Directory_Path);
-                Console.WriteLine("The directory was created successfully at {0}.", Directory.GetCreationTime(path));
+                Console.WriteLine("The directory was created successfully at {0}.", Directory.GetCreationTime(Directory_Path));
 
                 // Delete the directory.
                 //dir.Delete();

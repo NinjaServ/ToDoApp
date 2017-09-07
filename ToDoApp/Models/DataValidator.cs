@@ -28,7 +28,7 @@ using System.Net.Mail;
 
 namespace ToDoApp.Models
 {
-    class DataValidator
+    public class DataValidator
     {
 
         static public bool StringIsText(string textString)
@@ -63,37 +63,39 @@ namespace ToDoApp.Models
         // \W matches any non-word character.
         static public bool TextIsWords(string textString)
         {
-            Regex regEx = new Regex("[/w/d/s]");
-            bool result = false;
+            Regex regEx = new Regex("^[/w/d/s]");
+            bool result = true;
 
             if (regEx.IsMatch(textString))
             {
-                result = true;
+                result = false;
             }
             return result; 
         }
 
         static public bool TextIsSentences(string textString)
         {
-            Regex regEx = new Regex(@"[a-zA-Z0-9.,!?;:/-]+?");
-            bool result = false;
+            Regex regEx = new Regex(@"^[a-zA-Z0-9.,!?;:\- \p{P}\p{L}\p{M}]+?");
+            bool result = true;
 
             if (regEx.IsMatch(textString))
             {
-                result = true;
+                result = false;
             }
 
             return result;
         }
 
-        static public bool TextIsParagraphs(string textString)
+        //@"[\w\d\s\r\n\p{Punctuation}\p{Letter}\p{Mark}\p{Currency_Symbol}]+?"
+        //\p{IsGreek}\p{IsBasicLatin} \p{Sc}
+        static public bool TextIsParagraphic(string textString)
         {
-            Regex regEx = new Regex(@"[\w\d\s\r\n\p{Punctuation}\p{Letter}\p{Mark}\p{Currency_Symbol}]+?");
-            bool result = false;
+            Regex regEx = new Regex(@"^[\w\d\s\r\n\p{P}\p{L}\p{M}]+?");
+            bool result = true;
 
             if (regEx.IsMatch(textString))
             {
-                result = true;
+                result = false;
             }
 
             return result;
