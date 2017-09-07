@@ -8,36 +8,79 @@ using System.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+
+using System.ComponentModel;
 using System.Collections.ObjectModel;
 using ToDoApp.Models;
+using ToDoApp.Infrastructure;
+
 
 namespace ToDoApp.ViewModels
 {
     public class ItemDetail_ViewModel : BindableBase, IConfirmNavigationRequest
     {
         IRegionNavigationJournal _journal;
+        IToDoList_Service _toDoItemListService;
+        bool contentDirty = false;
 
         private ToDoItem _selectedItem;
-        public ToDoItem SelectedItem
+        public ToDoItem SelectedItem { get; set; }
+        //{
+        //    get { return _selectedItem; }
+        //    set { SetProperty(ref _selectedItem, value); }
+        //}
+
+        private ToDoItem _tempItem;
+        public ToDoItem TempItem
         {
-            get { return _selectedItem; }
-            set { SetProperty(ref _selectedItem, value); }
+            get { return _tempItem; }
+            set
+            {
+                SetProperty(ref _tempItem, value);
+                contentDirty = true;
+            }
         }
 
         public DelegateCommand GoBackCommand { get; set; }
+        public DelegateCommand CompletedCommand { get; set; }
+        public DelegateCommand SaveCommand { get; set; }
+        //public ICollectionView ItemsCV { get; private set; }
 
-        public ItemDetail_ViewModel()
+        public ItemDetail_ViewModel(IToDoList_Service toDoListService)
         {
+            _toDoItemListService = toDoListService;
+            
+            TempItem = new ToDoItem(); 
+            //this.ItemsCV = CollectionViewSource.GetDefaultView(ToDoItemList);
+
+            //< ToDoItem > = IObservable<ToDoItem>(SelectedItem); 
             GoBackCommand = new DelegateCommand(GoBack);
+            CompletedCommand = new DelegateCommand(CompleteItem);
+            SaveCommand = new DelegateCommand(SaveItem);
         }
+
+        //public ICollectionView ItemsCV { get; private set; }
+        // // Initialize the CollectionView for the underlying model
+        // // and track the current selection.
+        //this.ItemsCV = CollectionViewSource.GetDefaultView(ToDoItemList);
+   
+
+        //public void SaveToDoItem()
+        //(
+        //    //SelectedItem
+        //    //_ToDoItemListService.SaveToDoItem();
+        //)
 
         public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
         {
             bool result = true;
 
-            if (MessageBox.Show("Do you want to Exit without saving?", "Exit?", MessageBoxButton.YesNo) == MessageBoxResult.No)
-                result = false;
-
+            if( contentDirty )
+            {
+                if (MessageBox.Show("Do you want to Exit without saving?", "Exit?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    result = false;
+            }
+            
             continuationCallback(result);
         }
 
@@ -63,7 +106,11 @@ namespace ToDoApp.ViewModels
 
             var item = navigationContext.Parameters["ToDoItem"] as ToDoItem;
             if (item != null)
+            {
                 SelectedItem = item;
+                TempItem = null; 
+                TempItem = SelectedItem.DeepCopy(); 
+            }
         }
 
 
@@ -71,6 +118,29 @@ namespace ToDoApp.ViewModels
         private void GoBack()
         {
             _journal.GoBack();
+        }
+
+        private void CompleteItem()
+        {
+            bool result = TempItem.CompleteToggle();
+            contentDirty = true; 
+        }
+
+        private void SaveItem()
+        {
+            //if(contentUpdated)
+            if(true) 
+            {
+                //SelectedItem = null; 
+                //ToDoList_service;
+                _toDoItemListService.ReplaceToDoItem(SelectedItem, TempItem);
+                //SelectedItem = TempItem;
+                //TempItem = SelectedItem.DeepCopy();
+                
+                contentDirty = false;
+
+                bool response = (MessageBox.Show("Changes to the task have been saved", "Task Saved", MessageBoxButton.OK) == MessageBoxResult.OK);
+            }
         }
 
     }

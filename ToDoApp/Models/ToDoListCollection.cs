@@ -9,7 +9,7 @@ using ToDoApp.Models;
 namespace ToDoApp.Models
 {
     /// <summary>
-    /// Collection class for Employee entitites.
+    /// Collection class for ToDoItem entitites.
     /// </summary>
     public class ToDoListCollection : ObservableCollection<ToDoItem>
     {
@@ -17,6 +17,10 @@ namespace ToDoApp.Models
         public ToDoListCollection()
         {
             
+        }
+
+        public ToDoListCollection(IEnumerable<ToDoItem> collection) : base(collection)
+        {
         }
 
         static public ToDoListCollection ListToCollection(IList<ToDoItem> itemList)

@@ -10,7 +10,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.ObjectModel;
 using ToDoApp.Models;
-
+using ToDoApp.Infrastructure;
 
 namespace ToDoApp.ViewModels
 {
@@ -58,15 +58,14 @@ namespace ToDoApp.ViewModels
             }
         }
 
+        IToDoList_Service _ToDoItemListService;
 
-        //public AddItem_ViewModel()
-        //{
 
-        //}
-
-        public AddItem_ViewModel(RegionManager regionManager)
+        public AddItem_ViewModel(RegionManager regionManager, IToDoList_Service toDoListService)
         {
             _regionManager = regionManager;
+            _ToDoItemListService = toDoListService;
+
 
             ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
       
@@ -111,7 +110,7 @@ namespace ToDoApp.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _journal = navigationContext.NavigationService.Journal;
-            GoForwardCommand.RaiseCanExecuteChanged();
+            //GoForwardCommand.RaiseCanExecuteChanged();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

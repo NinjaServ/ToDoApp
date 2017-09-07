@@ -18,12 +18,13 @@ namespace ToDoApp.Infrastructure
 {
     public class ToDoList_Service : BindableBase, IToDoList_Service
     {
-        private const string File_Path_JSON = @"./Data/ToDoListData.json";
-        private const string File_Path_Settings = @"./Data/SettingsData.json";
+        private const string Directory_Path = @".\Data\";
+        private const string File_Path_JSON = Directory_Path + @"ToDoListData.json";
+        private const string File_Path_Settings = Directory_Path + @"SettingsData.json";
 
         struct keySet
         {
-            public const string item_counter = "item_counter", text_file = "text_file", 
+            public const string item_counter = "item_counter", text_file = "text_file",
                 text_file_path = "text_file_path", settings_file_path = "settings_file_path";
         };
 
@@ -43,10 +44,11 @@ namespace ToDoApp.Infrastructure
         }
 
         private SettingsDictionary settings { get; set; }
-        //public Dictionary<string, string> settings  { get; set; }
 
         public ToDoList_Service()
         {
+            DirectoryCheck();
+
             settings = new SettingsDictionary();
             if (SettingsFile_Check())
                 SettingsFile_Load();
@@ -61,7 +63,7 @@ namespace ToDoApp.Infrastructure
                 DataFile_Load();
             else
             {
-                Initialize_Settings();
+                Initialize_ToDoList();
                 DataFile_Save();
             }
 
@@ -73,7 +75,7 @@ namespace ToDoApp.Infrastructure
             {
                 settings.Add(keySet.item_counter, "1");
                 settings.Add(keySet.text_file, "1");
-                settings.Add(keySet.text_file, File_Path_JSON);
+                settings.Add(keySet.text_file_path, File_Path_JSON);
                 settings.Add(keySet.settings_file_path, File_Path_Settings);
             }
             else
@@ -81,6 +83,23 @@ namespace ToDoApp.Infrastructure
                 return false;
             }
             return true;
+        }
+
+        bool Sync_Settings()
+        {
+            bool result;
+
+            if (SettingsFile_Check())
+            {
+                SettingsFile_Save();
+                result = true;
+            }
+            else
+            {
+                return false;
+            }
+
+            return result;
         }
 
         public bool Initialize_ToDoList()
@@ -92,6 +111,71 @@ namespace ToDoApp.Infrastructure
             }
 
             return false;
+        }
+
+
+        public ToDoListCollection GetToDoList()
+        {
+            return ToDoList;
+        }
+
+        public bool SyncToDoList()
+        {
+            bool result;
+
+            if (DataFile_Check())
+            {
+                DataFile_Save();
+                result = true;
+            }
+            else
+            {
+                return false;
+            }
+
+            return result;
+        }
+
+        public bool ReplaceToDoItem(ToDoItem toDoItem, ToDoItem replacementItem)
+        {
+            bool result = false;
+
+            if (ToDoList != null && toDoItem != null && replacementItem != null)
+            {
+                if (ToDoList.Contains(toDoItem))
+                {
+                    int index = ToDoList.IndexOf(toDoItem);
+                    //ToDoList.Insert(index, replacementItem);
+                    //ToDoList.Remove(toDoItem);
+                    ToDoList[index] = replacementItem;
+                    SyncToDoList();
+                    result = true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+            return result;
+        }
+
+        public bool DeleteToDoItem(ToDoItem toDoItem)
+        {
+            bool result;
+
+            if (ToDoList != null && toDoItem != null)
+            {
+                ToDoList.Remove(toDoItem);
+                SyncToDoList();
+                result = true;
+            }
+            else
+            {
+                return false;
+            }
+
+            return result;
         }
 
 
@@ -111,7 +195,35 @@ namespace ToDoApp.Infrastructure
             return true;
         }
 
+        private bool DirectoryCheck()
+        {
+            // Specify the directory you want to manipulate.
+            string path = @".\Data\";
 
+            try
+            {
+                // Determine whether the directory exists.
+                if (Directory.Exists(Directory_Path))
+                {
+                    Console.WriteLine("That path exists already. {0}", Directory_Path);
+                    return true;
+                }
+
+                // Try to create the directory.
+                DirectoryInfo dir = Directory.CreateDirectory(Directory_Path);
+                Console.WriteLine("The directory was created successfully at {0}.", Directory.GetCreationTime(path));
+
+                // Delete the directory.
+                //dir.Delete();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The process failed: {0}", e.ToString());
+            }
+            finally { }
+
+            return false;
+        }
 
         private bool DataFile_Check()
         {
@@ -125,12 +237,12 @@ namespace ToDoApp.Infrastructure
 
             try
             {
-                ToDoListIO.Save(ToDoList);
+                ToDoListIO.Save(ToDoList, File_Path_JSON);
                 result = true;
             }
             catch (Exception e)
             {
-                System.Console.WriteLine("File Save Error, Exception: {0}", e.Message);
+                System.Console.WriteLine("File Save Error, Exception: {0}", e.ToString());  //e.Message
             }
 
             return result;
@@ -142,7 +254,8 @@ namespace ToDoApp.Infrastructure
 
             try
             {
-                ToDoListCollection listCollection = ToDoListIO.Load();
+                var aList = ToDoListIO.Load(File_Path_JSON);
+                ToDoListCollection listCollection = aList;
                 if (listCollection != null)
                 {
                     ToDoList = listCollection;
@@ -169,14 +282,14 @@ namespace ToDoApp.Infrastructure
 
             try
             {
-                SettingsIO.Save(settings);
+                SettingsIO.Save(settings, File_Path_Settings);
                 result = true;
             }
             catch (Exception e)
             {
                 System.Console.WriteLine("Exception: {0} \nFile Save Error", e.Message);
             }
-    
+
             return result;
         }
 
@@ -186,7 +299,7 @@ namespace ToDoApp.Infrastructure
 
             try
             {
-                SettingsDictionary settingsDict = SettingsIO.Load();
+                SettingsDictionary settingsDict = SettingsIO.Load(File_Path_Settings);
                 if (settingsDict != null)
                 {
                     settings = settingsDict;
@@ -201,6 +314,8 @@ namespace ToDoApp.Infrastructure
             return result;
         }
 
+
+
         /*
          * - Check if file exists, if not, create file 
          * - If file exists, save to file
@@ -210,38 +325,6 @@ namespace ToDoApp.Infrastructure
          * 
          * 
          */
-
-        public void WriteFile_JSON(string filePath)
-        {
-            var itemList = _toDoList.ToList<ToDoItem>();
-
-            if (itemList.Count != 0)
-            {
-                var serializer = new JavaScriptSerializer();
-                var serializedResult = serializer.Serialize(itemList);
-                //    write string to file
-                System.IO.File.WriteAllText(filePath, serializedResult);
-            }
-        }
-
-        public ToDoListCollection ReadFile_JSON(string filePath)
-        {
-            var itemList = _toDoList.ToList<ToDoItem>();
-
-            if (File.Exists(filePath))
-            {
-                string data = System.IO.File.ReadAllText(filePath);
-
-                var serializer = new JavaScriptSerializer();
-                var deserializedResult = serializer.Deserialize<List<ToDoItem>>(data);
-
-                ToDoListCollection aCollection = ToDoListCollection.ListToCollection(deserializedResult);
-
-                return aCollection;
-            }
-
-            return null; 
-        }
 
         class SettingsIO : FileIO<SettingsDictionary>
         {
@@ -261,11 +344,30 @@ namespace ToDoApp.Infrastructure
             {
                 this.Save(File_Path_JSON);
             }
+
+            public new static ToDoListCollection Load(string fileName)
+            {
+                ToDoListCollection t = null;
+
+                if (File.Exists(fileName))
+                {
+                    //var serializer = new JavaScriptSerializer();
+                    //var kvpData = serializer.DeserializeObject(File.ReadAllText(fileName));
+
+                    IEnumerable<ToDoItem> result = (new JavaScriptSerializer()).Deserialize<List<ToDoItem>>(File.ReadAllText(fileName));
+                    t = new ToDoListCollection(result);
+                }
+
+                return t;
+            }
+
         }
 
     }
 
-    class SettingsDictionary: Dictionary<string,string>
+
+
+    class SettingsDictionary : Dictionary<string, string>
     {
         public SettingsDictionary()
         {

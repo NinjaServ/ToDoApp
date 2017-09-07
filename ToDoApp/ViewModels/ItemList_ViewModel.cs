@@ -27,19 +27,20 @@ namespace ToDoApp.ViewModels
         IRegionNavigationService _navService;
 
         internal string _filterString;
-        public IList<string> listProperty { get; set; }
+        //public IList<string> listProperty { get; set; }
 
         IToDoList_Service _ToDoItemListService;
 
-        internal ObservableCollection<ToDoItem> _ToDoItemList;
-        public ObservableCollection<ToDoItem> ToDoItemList
+        //ObservableCollection<ToDoItem>
+        internal ToDoListCollection _ToDoItemList;
+        public ToDoListCollection ToDoItemList
         {
             get { return _ToDoItemList; }
             set { SetProperty(ref _ToDoItemList, value); }
         }
 
         public ICollectionView ItemsCV { get; private set; }
-        private readonly IEventAggregator eventAggregator;
+        //private readonly IEventAggregator eventAggregator;
 
 
         //public DelegateCommand<ToDoItem> ItemSelectedCommand { get; private set; }
@@ -63,11 +64,9 @@ namespace ToDoApp.ViewModels
 
             _regionManager = regionManager;
             _ToDoItemListService = toDoListService;
-
-            //_ToDoItemListService.SaveToDoItem();
+            _ToDoItemList = toDoListService.GetToDoList(); 
 
             //ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
-            CreateItems();
             _filterString = "";
 
             // Initialize the CollectionView for the underlying model
@@ -138,11 +137,11 @@ namespace ToDoApp.ViewModels
         private void SelectedItemChanged(object sender, EventArgs e)
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
-            if (item != null)
-            {
-                // Publish the SelectedEvent event.
-                this.eventAggregator.GetEvent<PubSubEvent<int>>().Publish(item.id);
-            }
+            //if (item != null)
+            //{
+            //    // Publish the SelectedEvent event.
+            //    this.eventAggregator.GetEvent<PubSubEvent<int>>().Publish(item.id);
+            //}
         }
 
         private void ItemSelectedEvent(int id)
@@ -155,18 +154,18 @@ namespace ToDoApp.ViewModels
 
 
         //Test method for itemList population - can migrate to Unit Test
-        private void CreateItems()
-        {
-            var itemList = new ObservableCollection<ToDoItem>();
-            itemList.Add(new ToDoItem("Item1", "These are Details 1", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("Item2", "These are Details 2", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("Item3", "These are Details 3", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("aItem4", "Oh Details 4", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("Item 5", "For 5 details are here", DateTime.Now, DateTime.Now.AddDays(1.0)));
-            itemList.Add(new ToDoItem("zItem6", "Some 6 details are ny", DateTime.Now, DateTime.Now.AddDays(1.0)));
+        //private void CreateItems()
+        //{
+        //    var itemList = new ToDoListCollection();
+        //    itemList.Add(new ToDoItem("Item1", "These are Details 1", DateTime.Now, DateTime.Now.AddDays(1.0)));
+        //    itemList.Add(new ToDoItem("Item2", "These are Details 2", DateTime.Now, DateTime.Now.AddDays(1.0)));
+        //    itemList.Add(new ToDoItem("Item3", "These are Details 3", DateTime.Now, DateTime.Now.AddDays(1.0)));
+        //    itemList.Add(new ToDoItem("aItem4", "Oh Details 4", DateTime.Now, DateTime.Now.AddDays(1.0)));
+        //    itemList.Add(new ToDoItem("Item 5", "For 5 details are here", DateTime.Now, DateTime.Now.AddDays(1.0)));
+        //    itemList.Add(new ToDoItem("zItem6", "Some 6 details are ny", DateTime.Now, DateTime.Now.AddDays(1.0)));
 
-            _ToDoItemList = itemList;
-        }
+        //    _ToDoItemList = itemList;
+        //}
 
         private void GoAddItem()
         {
@@ -206,7 +205,7 @@ namespace ToDoApp.ViewModels
 
             if (item != null)
             {
-                ToDoItemList.Remove(item);
+                _ToDoItemListService.DeleteToDoItem(item);
                 item = null;
             }
         }
@@ -253,6 +252,10 @@ namespace ToDoApp.ViewModels
             _journal = navigationContext.NavigationService.Journal;
             //Change command status
             GoAddItemCommand.RaiseCanExecuteChanged();
+
+            //this.ItemsCV = CollectionViewSource.GetDefaultView(ToDoItemList);
+            this.ItemsCV.Refresh();
+
         }
 
 

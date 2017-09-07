@@ -96,15 +96,15 @@ namespace ToDoApp.Models
             detail = @"";
             createDate = DateTime.Now;
             dueDate = this.createDate.AddDays(1.0);
-            completeDate = new DateTime();
-            completeDate = new DateTime(0);
+            //completeDate = new DateTime();
+            //completeDate = new DateTime(0);
             completeDate = DateTime.MinValue;
         }
 
 
         public bool IsComplete()
         {
-            DateTime initDate = new DateTime();
+            DateTime initDate = DateTime.MinValue;
             return (this.completeDate > initDate ? true : false);
         }
 
@@ -118,6 +118,21 @@ namespace ToDoApp.Models
             return (this.dueDate.Date > DateTime.Now.Date && (!IsComplete()) ? true : false);
         }
 
+        public bool Complete()
+        {
+            this.completeDate = DateTime.Now.Date;
+            return (IsComplete());
+        }
+
+        public bool CompleteToggle()
+        {
+            bool completed = false;
+            if (IsComplete())
+                this.completeDate = DateTime.MinValue;
+            else
+                completed = Complete();
+            return (completed);
+        }
 
 
         /// <summary>
@@ -138,6 +153,25 @@ namespace ToDoApp.Models
 
             return todoDictionary;
         }
+
+        public static Dictionary<string, string> toDictionary(ToDoItem data)
+        {
+            Dictionary<string, string> FD = (from x in data.GetType().GetProperties() select x).ToDictionary(x => x.Name,
+                x => (x.GetGetMethod().Invoke(data, null) == null ? "" :
+                x.GetGetMethod().Invoke(data, null).ToString()));
+
+            return FD;
+
+        }
+
+        IEnumerable<KeyValuePair<string, object>> Convert(IDictionary<string, string> dic)
+        {
+            foreach (var item in dic)
+            {
+                yield return new KeyValuePair<string, object>(item.Key, item.Value);
+            }
+        }
+
 
         ~ToDoItem()
         {
@@ -164,7 +198,7 @@ namespace ToDoApp.Models
 
 
         #region IDataErrorInfo Interface
-        
+
         public string Error
         {
             get
@@ -198,12 +232,62 @@ namespace ToDoApp.Models
                         }
                         break;
                 }
-                return error; 
+                return error;
             }
         }
 
         #endregion
-    }  
+
+        //public static Object GetObject(this Dictionary<string, object> dict, Type type)
+        //{
+        //    var obj = Activator.CreateInstance(type);
+
+        //    foreach (var kv in dict)
+        //    {
+        //        var prop = type.GetProperty(kv.Key);
+        //        if (prop == null) continue;
+
+        //        object value = kv.Value;
+        //        if (value is Dictionary<string, object>)
+        //        {
+        //            value = GetObject((Dictionary<string, object>)value, prop.PropertyType); // <= This line
+        //        }
+
+        //        prop.SetValue(obj, value, null);
+        //    }
+        //    return obj;
+        //}
+    }
+
+    
+
+    //public static class ObjectExtensions
+    //{
+    //    public static T ToObject<T>(this IDictionary<string, object> source)
+    //        where T : class, new()
+    //    {
+    //        T someObject = new T();
+    //        Type someObjectType = someObject.GetType();
+
+    //        foreach (KeyValuePair<string, object> item in source)
+    //        {
+    //            someObjectType.GetProperty(item.Key).SetValue(someObject, item.Value, null);
+    //        }
+
+    //        return someObject;
+    //    }
+
+    //    //public static IDictionary<string, object> AsDictionary(this object source, 
+    //    //    BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+    //    //{
+    //    //    return source.GetType().GetProperties(bindingAttr).ToDictionary
+    //    //    (
+    //    //        propInfo => propInfo.Name,
+    //    //        propInfo => propInfo.GetValue(source, null)
+    //    //    );
+
+    //    //}
+    //}
 }
 
 
