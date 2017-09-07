@@ -51,6 +51,7 @@ namespace ToDoApp.ViewModels
         public DelegateCommand GoDeleteCommand { get; set; }
         public DelegateCommand GoCompleteCommand { get; set; }
 
+        //public bool IsDateValid { get { return todoitem.dueDate < DateTime.Now; } }
 
         //public ItemList_ViewModel()
         //{
@@ -195,7 +196,9 @@ namespace ToDoApp.ViewModels
 
             if (item != null)
             {
-                item.completeDate = DateTime.Now;
+                bool result = item.CompleteToggle();
+                //_ToDoItemListService
+                //item.completeDate = DateTime.Now;
             }
         }
 

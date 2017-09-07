@@ -105,7 +105,7 @@ namespace ToDoApp.Models
         public bool IsComplete()
         {
             DateTime initDate = DateTime.MinValue;
-            return (this.completeDate > initDate ? true : false);
+            return (this.completeDate.Date > initDate.Date ? true : false);
         }
 
         public bool IsDue()
@@ -115,7 +115,7 @@ namespace ToDoApp.Models
 
         public bool IsOverdue()
         {
-            return (this.dueDate.Date > DateTime.Now.Date && (!IsComplete()) ? true : false);
+            return (this.dueDate.Date < DateTime.Now.Date && (!IsComplete()) ? true : false);
         }
 
         public bool Complete()

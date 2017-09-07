@@ -7,10 +7,10 @@
              prism:ViewModelLocator.AutoWireViewModel="True">
     <!--xmlns:Height="400" Width="525">-->
     
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <src:DateTime x:Key="myDataSource" Date="Today"/>
         <src:todayDate x:Key="aDate"/>
-    </UserControl.Resources> 
+    </UserControl.Resources> -->
     
     <Grid>
         <!--<ContentControl prism:RegionManager.RegionName="ContentRegion" />-->

@@ -101,6 +101,7 @@
     <Compile Include="Models\ToDoListItem.cs" />
     <Compile Include="Models\ToDoList_Model.cs" />
     <Compile Include="ViewModels\AddItem_ViewModel.cs" />
+    <Compile Include="ViewModels\HighlightConverter.cs" />
     <Compile Include="ViewModels\ItemDetail_ViewModel.cs" />
     <Compile Include="ViewModels\ItemList_ViewModel.cs" />
     <Compile Include="Views\AddItem_View.xaml.cs">

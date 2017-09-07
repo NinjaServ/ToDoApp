@@ -231,3 +231,8 @@ MethodName
 
 XAML
 <TextBlock Text="{Binding Source={StaticResource myDataSource}, Path=PersonName}"/>
+
+
+
+
+Binding="{Binding Path=., Converter={StaticResource myFileExtensionConverter}, ConverterParameter=old}" Value="True"
