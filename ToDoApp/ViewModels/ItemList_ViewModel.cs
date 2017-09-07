@@ -42,6 +42,13 @@ namespace ToDoApp.ViewModels
         public ICollectionView ItemsCV { get; private set; }
         //private readonly IEventAggregator eventAggregator;
 
+        private ToDoItem _selectedItem;
+        public ToDoItem SelectedItem
+        {
+            get { return _selectedItem; }
+            set { SetProperty(ref _selectedItem, value); }
+        }
+
 
         //public DelegateCommand<ToDoItem> ItemSelectedCommand { get; private set; }
         public DelegateCommand GoAddItemCommand { get; set; }
@@ -65,7 +72,7 @@ namespace ToDoApp.ViewModels
 
             _regionManager = regionManager;
             _ToDoItemListService = toDoListService;
-            _ToDoItemList = toDoListService.GetToDoList(); 
+            _ToDoItemList = toDoListService.GetToDoList();
 
             //ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
             _filterString = "";
@@ -74,7 +81,7 @@ namespace ToDoApp.ViewModels
             // and track the current selection.
             this.ItemsCV = CollectionViewSource.GetDefaultView(ToDoItemList);
             //this.ItemsCV = new ListCollectionView(ToDoItemList);
-            this.ItemsCV.CurrentChanged += new EventHandler(this.ItemSelected); //SelectedItemChanged
+            this.ItemsCV.CurrentChanged += ItemSelected; //new EventHandler(this.ItemSelected); //SelectedItemChanged
             this.ItemsCV.Filter = SearchFilter;
             //_filterString = "Search Text..."; 
 
@@ -87,7 +94,7 @@ namespace ToDoApp.ViewModels
             GoSelectCommand = new DelegateCommand(GoForward, CanGoForward);
 
             GoDetailCommand = new DelegateCommand(GoItemDetails, () => true); //CanGoForward
-            GoDeleteCommand = new DelegateCommand(GoItemDelete, () => true); 
+            GoDeleteCommand = new DelegateCommand(GoItemDelete, () => true);
             GoCompleteCommand = new DelegateCommand(GoItemComplete, () => true); //CanGoForward
 
             //GoStatsCommand = new DelegateCommand(() => new IMessage("My Test Message", "A test title"),
@@ -96,14 +103,14 @@ namespace ToDoApp.ViewModels
             //this.eventAggregator.GetEvent<PubSubEvent<int>>().Subscribe(this.ItemSelectedEvent, true);
         }
 
-       
+
 
         private bool SearchFilter(object sender)
         {
             ToDoItem item = sender as ToDoItem;
             //bool contains = item.task.IndexOf(_filterString, StringComparison.OrdinalIgnoreCase) >= 0;
-            bool contains = item.task.IndexOf(_filterString, StringComparison.CurrentCultureIgnoreCase) != -1 ;
-            return contains;  
+            bool contains = item.task.IndexOf(_filterString, StringComparison.CurrentCultureIgnoreCase) != -1;
+            return contains;
         }
 
         public string FilterString
@@ -118,14 +125,21 @@ namespace ToDoApp.ViewModels
         }
 
 
+
+        // View.CurrentChanged += View_CurrentChanged;
+        //  void View_CurrentChanged(object sender, EventArgs e)
         //private void ItemSelected(ToDoItem item)
         private void ItemSelected(object sender, EventArgs e)
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+            SelectedItem = item;
             //var it = (ListCollectionView)sender.InternalList.CurrentItem as ToDoItem;
+            //CollectionViewSource.GetDefaultView(ToDoItemList).MoveCurrentTo(this.datagrid.CurrentItem);
+
 
             if (item != null)
             {
+                //New parameters with each new selection
                 var parameters = new NavigationParameters();
                 parameters.Add("ToDoItem", item);
             }
@@ -149,8 +163,8 @@ namespace ToDoApp.ViewModels
         {
             if (id == 0) return;
 
-            // Get the employee entity with the selected ID.
-            ToDoItem selectedEmployee = this.ToDoItemList.FirstOrDefault(item => item.id == id);
+            // Get the  entity with the selected ID.
+            ToDoItem selectedItem = this.ToDoItemList.FirstOrDefault(item => item.id == id);
         }
 
 
@@ -179,7 +193,7 @@ namespace ToDoApp.ViewModels
         private void GoItemDetails()
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
-            
+
             if (item != null)
             {
                 var parameters = new NavigationParameters();
@@ -193,6 +207,7 @@ namespace ToDoApp.ViewModels
         private void GoItemComplete()
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+            SelectedItem = item; 
 
             if (item != null)
             {

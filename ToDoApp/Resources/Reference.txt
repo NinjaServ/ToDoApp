@@ -236,3 +236,23 @@ XAML
 
 
 Binding="{Binding Path=., Converter={StaticResource myFileExtensionConverter}, ConverterParameter=old}" Value="True"
+
+
+Commit:
+Fixed CollectionView error of event handling assignment. Was using object new EventHandler unnecessarily. 
+Had this.ItemsCV.CurrentChanged += new EventHandler(this.ItemSelected); when needed this.ItemsCV.CurrentChanged += ItemSelected; 
+
+Status Update
+Needs - ToDo
+1. update color style triggers
+2. update button styles
+3. Update todoitem properties for INotifyPropertyChanged
+4. Update listService to toggle completion and sync data.
+5. Remove unused buttons
+6. Remove unnecessary comments
+
+Test:
+See if row colors change - listview
+See if completed date changes with toggle - detailsview
+MessageBox - return without saving - addview
+Status Textblock - listview

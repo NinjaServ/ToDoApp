@@ -104,6 +104,7 @@
     <Compile Include="ViewModels\HighlightConverter.cs" />
     <Compile Include="ViewModels\ItemDetail_ViewModel.cs" />
     <Compile Include="ViewModels\ItemList_ViewModel.cs" />
+    <Compile Include="ViewModels\SelectionConverter.cs" />
     <Compile Include="Views\AddItem_View.xaml.cs">
       <DependentUpon>AddItem_View.xaml</DependentUpon>
     </Compile>
