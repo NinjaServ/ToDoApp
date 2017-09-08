@@ -96,7 +96,11 @@ namespace ToDoApp.ViewModels
       
             //GoForwardCommand = new DelegateCommand(GoForward, CanGoForward);
             GoBackCommand = new DelegateCommand(GoBack);
-            SaveCommand = new DelegateCommand(SaveItem, CanSaveItem);
+            //SaveCommand = new DelegateCommand(SaveItem, CanSaveItem);
+            SaveCommand = new DelegateCommand(SaveItem);
+
+            saveDirty = false;
+
         }
 
         //private void ItemSelected(ToDoItem item)
@@ -113,8 +117,8 @@ namespace ToDoApp.ViewModels
             if (_ToDoItemListService != null)
             {
                 _ToDoItemListService.AddItem(newItem);
-                saveDirty = false;
                 newItem = new ToDoItem();
+                saveDirty = false;
                 GoBack();
             }
             else
@@ -126,6 +130,8 @@ namespace ToDoApp.ViewModels
             if (_newItem != null && newItem.Error == null )
             {
                 return true;
+                //Button RaiseCanExecuteChanged;
+                // SaveCommand.RaiseCanExecuteChanged();
             }
             else
                 return false;
@@ -147,6 +153,7 @@ namespace ToDoApp.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            saveDirty = false; 
 
         }
 

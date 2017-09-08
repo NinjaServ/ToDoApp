@@ -57,6 +57,8 @@ namespace ToDoApp.ViewModels
             GoBackCommand = new DelegateCommand(GoBack);
             CompletedCommand = new DelegateCommand(CompleteItem);
             SaveCommand = new DelegateCommand(SaveItem);
+
+            //contentDirty = false;
         }
 
         //public ICollectionView ItemsCV { get; private set; }
@@ -97,6 +99,7 @@ namespace ToDoApp.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            contentDirty = false; 
 
         }
 
@@ -109,7 +112,8 @@ namespace ToDoApp.ViewModels
             {
                 SelectedItem = item;
                 TempItem = null; 
-                TempItem = SelectedItem.DeepCopy(); 
+                TempItem = SelectedItem.DeepCopy();
+                contentDirty = false;
             }
         }
 

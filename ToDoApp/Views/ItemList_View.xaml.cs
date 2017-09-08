@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,13 +24,43 @@ namespace ToDoApp.Views
         public ItemList_View()
         {
             InitializeComponent();
+
+            refreshTimerSetup();
         }
 
-        //private void addItem_Click(object sender, RoutedEventArgs e)
-        //{
+        ~ItemList_View()
+        {
+            if (dt != null)
+                dt.Stop(); 
+        }
+
+        private DispatcherTimer dt = null;
+
+        private void refreshTimerSetup()
+        {
+            refreshTimerStart(); 
+        }
+
+        private void refreshTimerStart()
+        {
+            dt = new DispatcherTimer();
+            dt.Interval = new TimeSpan(0, 1, 0); // TimeSpan.FromMinutes(1);
+            dt.Tick += timer_Tick; //new EventHandler()
+            dt.Start();
+            //dt.IsEnabled = true;
+
+        }
 
 
-        //}
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if (this.ToDoGrid != null)
+            {
+                this.ToDoGrid.Items.Refresh(); 
+            }
+        }
+        //refreshTimerSetup();
+
     }
 
     //public class MockRecord
@@ -38,6 +69,28 @@ namespace ToDoApp.Views
     //    public string task { get; set; }
     //}
 }
+
+////awaint Task.Run();
+////usage - await loadInfo(); 
+//private async Task loadInfo()
+//{
+
+//}
+
+
+//// await Task.Delay(TimeSpan.FromMinutes(1)) ;
+//// usage - await 5.Seconds;
+//public static Task Seconds(this int seconds)
+//{
+//    return Task.Delay(new TimeSpan(0, 0, seconds));
+//}
+
+//private void addItem_Click(object sender, RoutedEventArgs e)
+//{
+
+
+////}
+
 
 //private bool _isEnabled;
 //public bool IsEnabled

@@ -13,7 +13,8 @@ namespace ToDoApp.Infrastructure
 
         ToDoListCollection GetToDoList();
         bool SyncToDoList();
-        bool AddItem(ToDoItem addItem); 
+        bool AddItem(ToDoItem addItem);
+        bool ToggleItemCompleted(ToDoItem flagItem);
         bool ReplaceToDoItem(ToDoItem toDoItem, ToDoItem replacementItem); 
         bool DeleteToDoItem(ToDoItem toDoItem);
         bool SaveToDoItem(ToDoItem toDoItem);

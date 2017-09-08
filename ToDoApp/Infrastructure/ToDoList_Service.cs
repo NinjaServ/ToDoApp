@@ -184,7 +184,23 @@ namespace ToDoApp.Infrastructure
             return result ;
         }
 
-       
+        public bool ToggleItemCompleted(ToDoItem flagItem)
+        {
+            bool result = false;
+            if (flagItem != null && flagItem.Error == null)
+            {
+                if (ToDoList.Contains(flagItem))
+                {
+                    flagItem.CompleteToggle();
+                    SyncToDoList();
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+
 
         public bool ReplaceToDoItem(ToDoItem toDoItem, ToDoItem replacementItem)
         {

@@ -256,3 +256,11 @@ See if row colors change - listview
 See if completed date changes with toggle - detailsview
 MessageBox - return without saving - addview
 Status Textblock - listview
+
+Textbox animate
+
+-----
+List color update
+Submit button disable and animate
+ContentDirty / saveDirty - Save/Return messages
+Update highlighting after data change or based on current date/time change.  

@@ -81,6 +81,10 @@ namespace ToDoApp.Models
             if (regEx.IsMatch(textString))
             {
                 result = false;
+                foreach (Match ItemMatch in regEx.Matches(textString))
+                {
+                    var item = ItemMatch.Groups["item"].ToString();
+                }
             }
 
             return result;
@@ -90,12 +94,17 @@ namespace ToDoApp.Models
         //\p{IsGreek}\p{IsBasicLatin} \p{Sc}
         static public bool TextIsParagraphic(string textString)
         {
-            Regex regEx = new Regex(@"^[\w\d\s\r\n\p{P}\p{L}\p{M}]+?");
-            bool result = true;
+            Regex regEx = new Regex(@"[\w\d\s\r\n\p{P}\p{L}\p{M}]+?");
+            bool result = false;
 
             if (regEx.IsMatch(textString))
             {
-                result = false;
+                result = true;
+                foreach (Match ItemMatch in regEx.Matches(textString))
+                {
+                    var item = ItemMatch.Groups["item"].ToString();
+                    //var count = int.Parse(ItemMatch.Groups["count"].ToString());
+                }
             }
 
             return result;

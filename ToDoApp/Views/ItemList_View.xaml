@@ -17,26 +17,26 @@
         <vm:CompletedConverter x:Key="CompletedConverter" />
         <vm:SelectionConverter x:Key="SelectionConverter" />
 
-        <!--<Style TargetType="Button" x:Key="GelButton" >-->
+        <!--<Style TargetType="Button" x:Key="GButton" >    Converter={StaticResource SelectionConverter}}-->
         <Style x:Name="ButtonVisibility" x:Key="VisButton" TargetType="Button">
             <Setter Property="Opacity" Value=".5" />
             <Style.Triggers>
-                <!--<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=IsSelected, 
-                    Converter={StaticResource SelectionConverter}}" Value="True">-->
-                <!--<Setter Property="Opacity" Value="1" />-->
-                <!--</DataTrigger>-->
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=IsSelected}" Value="True">
+                    <Setter Property="Opacity" Value="1" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="RowOverdue" TargetType="DataGridRow">
+            <!--<EventSetter Event="Click" />                      NotifyOnTargetUpdated=True,  NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged -->
             <Style.Triggers>
-                <DataTrigger Binding = "{Binding Path=., Converter={StaticResource OverdueConverter}}" Value="True">
+                <DataTrigger Binding = "{Binding Path=., Converter={StaticResource OverdueConverter}, NotifyOnTargetUpdated=True}" Value="True">
                     <Setter Property="Background" Value="Red" />
                 </DataTrigger>
-                <DataTrigger Binding = "{Binding Path=., Converter={StaticResource DueConverter}}" Value="True">
+                <DataTrigger Binding = "{Binding Path=., Converter={StaticResource DueConverter}, NotifyOnTargetUpdated=True}" Value="True">
                     <Setter Property="Background" Value="Orange" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=., Converter={StaticResource CompletedConverter}}" Value="True">
+                <DataTrigger Binding="{Binding Path=., Converter={StaticResource CompletedConverter}, NotifyOnTargetUpdated=True}" Value="True">
                     <Setter Property="Background" Value="Gray" />
                 </DataTrigger>
             </Style.Triggers>
@@ -93,9 +93,9 @@
                       IsReadOnly="True" RowStyle="{StaticResource RowOverdue}" >
 
 
-                <!--"{Binding Path=id}"-->
+                <!--"{Binding Path=id}"             , Mode=OneWay, UpdateSourceTrigger=PropertyChanged-->
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="#" Binding="{Binding Path=id}" IsReadOnly="True" Width="Auto" />
+                    <DataGridTextColumn Header="#" Binding="{Binding Path=id, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="Auto" />
                     <DataGridTextColumn Header="Task" Binding="{Binding Path=task}" IsReadOnly="True" Width="*" />
                     <DataGridTextColumn Header="Due Date" Binding="{Binding Path=dueDate,StringFormat=MM/dd/yyyy}" IsReadOnly="True" Width="Auto" />
                     <DataGridTemplateColumn Width="Auto">
@@ -105,18 +105,16 @@
 
                                     <!--IsEnabled="{Binding ElementName=ToDoGrid, Path=SelectedItem, Converter={StaticResource SelectionConverter}}"-->
                                     <Button x:Name="detailsButton" Content="Details" Command="{Binding Path=DataContext.GoDetailCommand, 
-                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"  
-                                            Style="{StaticResource VisButton}" />
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}} }"  
+                                            Style="{StaticResource VisButton}"  Background="Aquamarine" />
 
                                     <Button x:Name="completeButton" Content="Complete" Command="{Binding Path=DataContext.GoCompleteCommand, 
                                         RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
-                                            
-                                            Style="{StaticResource VisButton}" />
+                                         Style="{StaticResource VisButton}"  Background="Yellow"/>
 
                                     <Button x:Name="deleteButton" Content="Delete" Command="{Binding Path=DataContext.GoDeleteCommand, 
                                         RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
-                                            
-                                            Style="{StaticResource VisButton}" />
+                                            Style="{StaticResource VisButton}" Background="Salmon"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -128,11 +126,12 @@
             <TextBox x:Name="textBox" Grid.Row="1" Grid.Column="0" Height="20" TextWrapping="Wrap" Margin="8,0,8,0"
                      Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Focusable="True" 
                      Style="{StaticResource BoxClear}" />
-            <Button x:Name="addButton" Content="Add Item" Command="{Binding GoAddItemCommand}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,8.4,11" VerticalAlignment="Center" Width="75"/>
+            <Button x:Name="addButton" Content="Add Item" Command="{Binding GoAddItemCommand}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,8.4,11" VerticalAlignment="Center" Width="75" />
             <Button x:Name="statsButton" Content="Stats" Command="{Binding GoStatsCommand}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,83.4,11" Width="75"/>
             <Button x:Name="selectionButton" Content="Select..." Command="{Binding GoSelectCommand}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="1,10,158.4,11" Width="75" />
-            
-            <TextBlock x:Name="statusText" Text="{Binding Path=ItemCV.CurrentItem.task}" Grid.Row="3" Grid.Column="0" Height="20" />
+
+            <TextBlock x:Name="statusText" Text="{Binding Path=ItemsCV.CurrentItem.task}" Grid.Row="3" Grid.Column="0" Height="20" Margin="8,2,8,2" Background="AliceBlue"
+                       Foreground="Crimson" />
         </Grid>
     </Grid>
 </UserControl>

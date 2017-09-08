@@ -9,27 +9,31 @@ using System.ComponentModel;
 using System.Web.Script.Serialization;
 //using Newtonsoft.Json;
 using System.IO;
-
+using Prism.Mvvm;
 
 namespace ToDoApp.Models
 {
-    public class ToDoItem : ICloneable, IDataErrorInfo
+    public class ToDoItem : BindableBase, ICloneable, IDataErrorInfo
     {
         //public static int counter = 1;
 
-        public int id { get; set; }
-        public string task { get; set; }
-        public string detail { get; set; }
-        public DateTime createDate { get; set; }
-        public DateTime dueDate { get; set; }
-        public DateTime completeDate { get; set; }
+        private int _id;
+        public int id { get { return _id; } set { SetProperty(ref _id, value); } }
+        private string _task;
+        public string task { get { return _task; } set { SetProperty(ref _task, value); } }
+        private string _detail;
+        public string detail { get { return _detail; } set { SetProperty(ref _detail, value); } }
+        private DateTime _createDate;
+        public DateTime createDate { get { return _createDate; } set { SetProperty(ref _createDate, value); } }
+        private DateTime _dueDate;
+        public DateTime dueDate { get { return _dueDate; } set { SetProperty(ref _dueDate, value); } }
+        private DateTime _completeDate;
+        public DateTime completeDate
+        { get { return _completeDate; }
+            set { SetProperty(ref _completeDate, value); } }
 
-        private float _log;
-        public float log
-        {
-            get { return this._log; }
-            set { this._log = value; }
-        }
+        private float _tag;
+        public float tag { get { return this._tag; } set { this._tag = value; }        }
 
 
         /// <summary>
@@ -131,6 +135,9 @@ namespace ToDoApp.Models
                 this.completeDate = DateTime.MinValue;
             else
                 completed = Complete();
+
+            RaisePropertyChanged(null);
+
             return (completed);
         }
 
@@ -210,12 +217,12 @@ namespace ToDoApp.Models
                     error = "Unique id required";
                 }
 
-                if (!DataValidator.StringIsText(task) && !DataValidator.TextIsSentences(task))
+                if (!DataValidator.StringIsText(task) || !DataValidator.TextIsParagraphic(task))
                 {
                     error = "Task text invalid";
                 }
 
-                if (!DataValidator.StringIsText(detail) && !DataValidator.TextIsParagraphic(detail))
+                if (detail == null )
                 {
                     error = "Detail text invalid";
                 }
@@ -238,16 +245,18 @@ namespace ToDoApp.Models
                             error = "Unique id required";
                         break;
                     case "task":
-                        if (!DataValidator.StringIsText(task) && !DataValidator.TextIsSentences(task))
+                        if (!DataValidator.StringIsText(task) || !DataValidator.TextIsParagraphic(task)) //TextIsSentences
                         {
                             error = "Task text invalid";
                         }
                         break;
-                    case "detail":
-                        if ( !DataValidator.StringIsText(detail) && !DataValidator.TextIsParagraphic(detail))
-                        {
+                    case "detail": //Details are not required
+                        if(detail == null)  //string.IsNullOrWhiteSpace(detail)
                             error = "Detail text invalid";
-                        }
+                        //if (!DataValidator.StringIsText(detail) || !DataValidator.TextIsParagraphic(detail))
+                        //{
+                        //    error = "Detail text invalid";
+                        //}
                         break;
                 }
                 return error;

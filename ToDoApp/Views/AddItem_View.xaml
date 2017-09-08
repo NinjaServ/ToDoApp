@@ -54,8 +54,8 @@
             <TextBlock Text="{Binding todayDate, StringFormat=MM/dd/yyyy, Mode=OneWay}"
                        TextWrapping="Wrap" Grid.Row="5" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF46f078" Margin="8,8,8,8" />
             <DatePicker Text="{Binding newItem.dueDate, Mode=TwoWay}" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" Margin="1,1,0,0" VerticalAlignment="Center"/>
-            <Button x:Name="submitButton" Content="Submit" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="75" Command="{Binding SaveCommand}" />
-            <Button x:Name="cancelButton" Content="Cancel" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,80,0.2" VerticalAlignment="Bottom" Width="75" Command="{Binding GoBackCommand}" />
+            <Button x:Name="submitButton" Content="Submit" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,80,0.2" VerticalAlignment="Bottom" Width="75" Command="{Binding SaveCommand}" Background="GreenYellow" />
+            <Button x:Name="cancelButton" Content="Cancel" Grid.Row="8" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="75" Command="{Binding GoBackCommand}" />
         </Grid>
     </Grid>
 </UserControl>

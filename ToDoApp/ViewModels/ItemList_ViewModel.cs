@@ -211,8 +211,8 @@ namespace ToDoApp.ViewModels
 
             if (item != null)
             {
-                bool result = item.CompleteToggle();
-                //_ToDoItemListService
+                _ToDoItemListService.ToggleItemCompleted(item);
+                //bool result = item.CompleteToggle();
                 //item.completeDate = DateTime.Now;
             }
         }
