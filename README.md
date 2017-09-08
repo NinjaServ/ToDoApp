@@ -1,7 +1,7 @@
 # ToDoApp
 A simple ToDo List application project for creating, reading, updating, and deleting ToDo events. The events have a task description and a details field. The events are assigned due dates. 
 
-This application uses the *Prism Library* for providing MVVM design pattern for the data domain, code logic, and the UI Interface; and to provide navigation between functional views in the application. The ToDo list data is stored in a local file in JSON format; storage is in the application's directory, in a subfolder named Data. 
+This application uses the *Prism Library* for providing MVVM design pattern for the data domain, code logic, and the UI Interface; and to provide navigation between functional views in the application. The ToDo list data is stored in a local file in JSON format; storage is in the application's directory, in a subfolder named _Data_. 
 
 ## Application Framework
 - Prism 6 Library
@@ -33,12 +33,13 @@ Create an application that provides the ubiquitous _"TODO list"_ example applica
 - [ ] *the date that it was created is also stored*
 
 #### Project Considerations
-> The list of TODOs is kept in memory.
+> The list of TODOs is kept in memory, and stored in a text file. 
 - This is a "native GUI" application. 
-- The Project is 
-  - using the C# language, 
-  - using WPF for the UI, 
-  - with an MVVM design pattern.
+- The Project is using
+  - the C# language 
+  - WPF for the UI
+  - an MVVM design pattern      
+    - [**Model** \~ *View* \~ **View-Model**]
 - .NET libraries and external libraries are pulled in as part of a build process with NuGet.
 
 
