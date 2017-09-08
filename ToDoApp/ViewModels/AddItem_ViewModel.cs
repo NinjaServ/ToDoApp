@@ -26,12 +26,7 @@ namespace ToDoApp.ViewModels
         public DelegateCommand GoBackCommand { get; set; }
         public DelegateCommand SaveCommand { get; set; }
 
-        //public ObservableCollection<DateTime> dateCollection
-        //{
-        //    get { return DateTime.Now; }
-        //}
 
-        //ObjectDataProvider - ObjectInstance property
 
         //public DateTime todayDate { get; set; } = DateTime.Now;
         DateTime _todayDate;
@@ -49,12 +44,6 @@ namespace ToDoApp.ViewModels
             set { SetProperty(ref _saveDirty, value); }
         }
 
-        //private string _title = "ToDo Application - Add Item";
-        //public string Title
-        //{
-        //    get { return _title; }
-        //    set { SetProperty(ref _title, value); }
-        //}
 
         private ToDoItem _newItem;
         public ToDoItem newItem
@@ -213,34 +202,3 @@ namespace ToDoApp.ViewModels
 }
 
 
-
-//< prism:InteractionRequestTrigger SourceObject = "{Binding CustomPopupViewRequest, Mode=OneWay}" >
-//    < prism:PopupWindowAction >
-//        < prism:PopupWindowAction.WindowContent >
-//            < views:CustomPopupView />
-//        </ prism:PopupWindowAction.WindowContent >
-//    </ prism:PopupWindowAction >
-// </ prism:InteractionRequestTrigger >
-
-//        < local:PopupPanel
-// Content = "{Binding PopupContent}"
-//local: PopupPanel.PopupParent = "{Binding ElementName=SomeParentPanel}"
-//local: PopupPanel.IsPopupVisible = "{Binding IsPopupVisible}" >
-
-
-// < local:PopupPanel.Resources >
-
-//      < DataTemplate DataType = "{x:Type local:SomeViewModel}" >
-
-//           < local:SomeView />
-
-//        </ DataTemplate >
-
-//        < DataTemplate DataType = "{x:Type local:DifferentViewModel}" >
-
-//             < local:DifferentView />
-
-//          </ DataTemplate >
-
-//      </ local:PopupPanel.Resources >
-//   </ local:PopupPanel >

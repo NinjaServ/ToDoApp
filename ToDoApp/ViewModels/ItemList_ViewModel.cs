@@ -169,21 +169,7 @@ namespace ToDoApp.ViewModels
             ToDoItem selectedItem = this.ToDoItemList.FirstOrDefault(item => item.id == id);
         }
 
-
-        //Test method for itemList population - can migrate to Unit Test
-        //private void CreateItems()
-        //{
-        //    var itemList = new ToDoListCollection();
-        //    itemList.Add(new ToDoItem("Item1", "These are Details 1", DateTime.Now, DateTime.Now.AddDays(1.0)));
-        //    itemList.Add(new ToDoItem("Item2", "These are Details 2", DateTime.Now, DateTime.Now.AddDays(1.0)));
-        //    itemList.Add(new ToDoItem("Item3", "These are Details 3", DateTime.Now, DateTime.Now.AddDays(1.0)));
-        //    itemList.Add(new ToDoItem("aItem4", "Oh Details 4", DateTime.Now, DateTime.Now.AddDays(1.0)));
-        //    itemList.Add(new ToDoItem("Item 5", "For 5 details are here", DateTime.Now, DateTime.Now.AddDays(1.0)));
-        //    itemList.Add(new ToDoItem("zItem6", "Some 6 details are ny", DateTime.Now, DateTime.Now.AddDays(1.0)));
-
-        //    _ToDoItemList = itemList;
-        //}
-
+               
         private void GoAddItem()
         {
             _regionManager.RequestNavigate("ContentRegion", "AddItem_View");
@@ -305,25 +291,6 @@ namespace ToDoApp.ViewModels
             _ToDoItemList = null;
         }
 
-
-
-        //public delegate void PropertyChangedHandler(object newValue);
-        //public event PropertyChangedHandler listChanged;
-
-        //private void addItem_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //var view = _container.Resolve<ItemList_View>();
-        //    //IRegion region = _regionManager.Regions["ContentRegion"];
-        //    //region.Add(view);
-
-        //    //--View Injection 
-        //    //IRegion region = _regionManager.Regions["ContentRegion"];
-        //    //var view = _container.Resolve<ItemList_View>();
-        //    //region.Add(view);
-
-        //    //var view2 = _container.Resolve<AddItem_View>();
-        //    //region.RequestNavigate(new Uri("AddItem_View", UriKind.Relative));
-        //}
-
+        
     }
 }

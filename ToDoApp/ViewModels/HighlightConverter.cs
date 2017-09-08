@@ -66,8 +66,7 @@ namespace ToDoApp.ViewModels
           System.Globalization.CultureInfo culture)
         {
             ToDoItem toDoItem = (ToDoItem)value;
-            //DateTime dueDate = (DateTime)value ;
-
+    
             bool result = toDoItem.IsDue();
 
             return result;
@@ -86,8 +85,7 @@ namespace ToDoApp.ViewModels
           System.Globalization.CultureInfo culture)
         {
             ToDoItem toDoItem = (ToDoItem)value;
-            //DateTime dueDate = (DateTime)value ;
-
+           
             bool result = toDoItem.IsComplete();
 
             return result;

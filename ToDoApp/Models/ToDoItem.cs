@@ -29,11 +29,13 @@ namespace ToDoApp.Models
         public DateTime dueDate { get { return _dueDate; } set { SetProperty(ref _dueDate, value); } }
         private DateTime _completeDate;
         public DateTime completeDate
-        { get { return _completeDate; }
-            set { SetProperty(ref _completeDate, value); } }
+        {
+            get { return _completeDate; }
+            set { SetProperty(ref _completeDate, value); }
+        }
 
         private float _tag;
-        public float tag { get { return this._tag; } set { this._tag = value; }        }
+        public float tag { get { return this._tag; } set { this._tag = value; } }
 
 
         /// <summary>
@@ -76,10 +78,14 @@ namespace ToDoApp.Models
         }
 
         /// <summary>
-        /// Parameterized Constructor
+        /// 
         /// </summary>
+        /// <param name="aID">unique identifier number for a record</param>
         /// <param name="aTask">Value for the Task string</param>
         /// <param name="aDetail">Value for the Detail string</param>
+        /// <param name="aCreateDate">Date value for date record is created</param>
+        /// <param name="aDueDate">Date value for the due date</param>
+        /// <param name="aCompleteDate">Date value for the completion date</param>
         public ToDoItem(int aID, string aTask, string aDetail, DateTime aCreateDate, DateTime aDueDate, DateTime aCompleteDate)
         {
             this.id = aID;
@@ -100,8 +106,6 @@ namespace ToDoApp.Models
             detail = @"";
             createDate = DateTime.Now;
             dueDate = this.createDate.AddDays(1.0);
-            //completeDate = new DateTime();
-            //completeDate = new DateTime(0);
             completeDate = DateTime.MinValue;
         }
 
@@ -222,7 +226,7 @@ namespace ToDoApp.Models
                     error = "Task text invalid";
                 }
 
-                if (detail == null )
+                if (detail == null)
                 {
                     error = "Detail text invalid";
                 }
@@ -251,7 +255,7 @@ namespace ToDoApp.Models
                         }
                         break;
                     case "detail": //Details are not required
-                        if(detail == null)  //string.IsNullOrWhiteSpace(detail)
+                        if (detail == null)  //string.IsNullOrWhiteSpace(detail)
                             error = "Detail text invalid";
                         //if (!DataValidator.StringIsText(detail) || !DataValidator.TextIsParagraphic(detail))
                         //{
@@ -265,57 +269,11 @@ namespace ToDoApp.Models
 
         #endregion
 
-        //public static Object GetObject(this Dictionary<string, object> dict, Type type)
-        //{
-        //    var obj = Activator.CreateInstance(type);
 
-        //    foreach (var kv in dict)
-        //    {
-        //        var prop = type.GetProperty(kv.Key);
-        //        if (prop == null) continue;
-
-        //        object value = kv.Value;
-        //        if (value is Dictionary<string, object>)
-        //        {
-        //            value = GetObject((Dictionary<string, object>)value, prop.PropertyType); // <= This line
-        //        }
-
-        //        prop.SetValue(obj, value, null);
-        //    }
-        //    return obj;
-        //}
     }
-
-
-
-    //public static class ObjectExtensions
-    //{
-    //    public static T ToObject<T>(this IDictionary<string, object> source)
-    //        where T : class, new()
-    //    {
-    //        T someObject = new T();
-    //        Type someObjectType = someObject.GetType();
-
-    //        foreach (KeyValuePair<string, object> item in source)
-    //        {
-    //            someObjectType.GetProperty(item.Key).SetValue(someObject, item.Value, null);
-    //        }
-
-    //        return someObject;
-    //    }
-
-    //    //public static IDictionary<string, object> AsDictionary(this object source, 
-    //    //    BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
-    //    //{
-    //    //    return source.GetType().GetProperties(bindingAttr).ToDictionary
-    //    //    (
-    //    //        propInfo => propInfo.Name,
-    //    //        propInfo => propInfo.GetValue(source, null)
-    //    //    );
-
-    //    //}
-    //}
 }
+
+
 
 
 //The project goals are simple: We would like you to create an application that provides the ubiquitous

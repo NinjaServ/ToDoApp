@@ -20,15 +20,17 @@ public class MethodWrapper : INotifyPropertyChanged
 
     public string Extension
     {
-        get { return GetExtension(Name); }
+        get { return GetExtension(Task); }
     }
 
-    public string Name
+    public string Task
     {
         get { return m_name; }
         set
         {
-            m_name = value; OnPropertyChanged("Name"); OnPropertyChanged("Extension");
+            m_name = value;
+            OnPropertyChanged("Task");
+            OnPropertyChanged("Details");
         }
     }
 

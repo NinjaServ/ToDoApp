@@ -23,8 +23,6 @@ namespace ToDoApp.Infrastructure
             _regionManager = regionManager;
             _container = container;
 
-            //RegionManager.SetRegionManager(view as DependencyObject, regionManager);
-            //RegionManager.SetRegionName(control, "MyRegion");
         }
 
         public void Initialize()
@@ -37,41 +35,9 @@ namespace ToDoApp.Infrastructure
 
 
             _regionManager.RequestNavigate("ContentRegion", "ItemList_View");
-            //_regionManager.RegisterViewWithRegion("ContentRegion", () =>
-            //          _container.Resolve<ItemList_View>());
-
-            //_regionManager.RequestNavigate("ContentRegion", "AddItem_View");
-
-            //_regionManager.RequestNavigate("ContentRegion",
-            //                    new Uri("ItemList_View", UriKind.Relative));
-
-            //--View Discovery
-            //_regionManager.RegisterViewWithRegion("ContentRegion", () =>
-            //          _container.Resolve<ItemList_View>());
-
-            //--View Injection 
-            //IRegion mainRegion = _regionManager.Regions["ContentRegion"];
-            //ItemList_View view = this._container.Resolve<ItemList_View>();
-            //mainRegion.Add(view);
-            //mainRegion.RequestNavigate(new Uri("ItemList_View", UriKind.Relative));
-
-            //Console.WriteLine($"Region Count: {0}", _regionManager.Regions.Count());
+            
         }
 
-        //private void SelectedEmployeeChanged(object sender, EventArgs e)
-        //{
-
-        //    _regionManager.RequestNavigate(RegionNames.TabRegion,
-        //                "ItemList_View", NavigationCompleted);
-        //}
-
-        //private void NavigationCompleted(NavigationResult result)
-        //{
-                //if(result)
-                //{
-                //    Debug.WriteLine("Sucess");
-                //}
-        //}
 
     }
    

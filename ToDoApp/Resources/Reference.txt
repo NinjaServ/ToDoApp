@@ -264,3 +264,63 @@ List color update
 Submit button disable and animate
 ContentDirty / saveDirty - Save/Return messages
 Update highlighting after data change or based on current date/time change.  
+
+
+
+
+// ObjectDataProvider - ObjectInstance property - XAML object instantiation
+
+
+//< prism:InteractionRequestTrigger SourceObject = "{Binding CustomPopupViewRequest, Mode=OneWay}" >
+//    < prism:PopupWindowAction >
+//        < prism:PopupWindowAction.WindowContent >
+//            < views:CustomPopupView />
+//        </ prism:PopupWindowAction.WindowContent >
+//    </ prism:PopupWindowAction >
+// </ prism:InteractionRequestTrigger >
+
+//        < local:PopupPanel
+// Content = "{Binding PopupContent}"
+//local: PopupPanel.PopupParent = "{Binding ElementName=SomeParentPanel}"
+//local: PopupPanel.IsPopupVisible = "{Binding IsPopupVisible}" >
+
+
+// < local:PopupPanel.Resources >
+
+//      < DataTemplate DataType = "{x:Type local:SomeViewModel}" >
+
+//           < local:SomeView />
+
+//        </ DataTemplate >
+
+//        < DataTemplate DataType = "{x:Type local:DifferentViewModel}" >
+
+//             < local:DifferentView />
+
+//          </ DataTemplate >
+
+//      </ local:PopupPanel.Resources >
+//   </ local:PopupPanel >
+
+
+ //public delegate void PropertyChangedHandler(object newValue);
+        //public event PropertyChangedHandler listChanged;
+
+        //private void addItem_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //var view = _container.Resolve<ItemList_View>();
+        //    //IRegion region = _regionManager.Regions["ContentRegion"];
+        //    //region.Add(view);
+
+        //    //--View Injection 
+        //    //IRegion region = _regionManager.Regions["ContentRegion"];
+        //    //var view = _container.Resolve<ItemList_View>();
+        //    //region.Add(view);
+
+        //    //var view2 = _container.Resolve<AddItem_View>();
+        //    //region.RequestNavigate(new Uri("AddItem_View", UriKind.Relative));
+        //}
+
+
+
+

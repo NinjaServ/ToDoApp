@@ -24,12 +24,9 @@ namespace ToDoApp.ViewModels
         IToDoList_Service _toDoItemListService;
         bool contentDirty = false;
 
-        private ToDoItem _selectedItem;
+        
         public ToDoItem SelectedItem { get; set; }
-        //{
-        //    get { return _selectedItem; }
-        //    set { SetProperty(ref _selectedItem, value); }
-        //}
+       
 
         private ToDoItem _tempItem;
         public ToDoItem TempItem
@@ -75,22 +72,10 @@ namespace ToDoApp.ViewModels
             //contentDirty = false;
         }
 
-        //public ICollectionView ItemsCV { get; private set; }
-        // // Initialize the CollectionView for the underlying model
-        // // and track the current selection.
-        //this.ItemsCV = CollectionViewSource.GetDefaultView(ToDoItemList);
-
-
-        //public void SaveToDoItem()
-        //(
-        //    //SelectedItem
-        //    //_ToDoItemListService.SaveToDoItem();
-        //)
-
+    
         void RaiseConfirmation()
         {
-          //  string Title = "";
-          
+                    
             ConfirmationRequest.Raise(new Confirmation
             {
                 Title = "Confirmation",
