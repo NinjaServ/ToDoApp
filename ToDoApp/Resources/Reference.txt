@@ -324,3 +324,6 @@ Update highlighting after data change or based on current date/time change.
 
 
 
+		-Sort completed items to bottom of the list
+		-Resume focus on last added item
+		-Change focus to first box when adding item

@@ -14,7 +14,7 @@
     
     <Grid>
         <!--<ContentControl prism:RegionManager.RegionName="ContentRegion" />-->
-        <Grid Margin="0,0,0.4,-0.2">
+        <Grid Margin="0,0,0.4,-0.2" >
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF7B97D4" />
@@ -49,7 +49,7 @@
             <TextBlock Text="Today : " TextWrapping="Wrap" Grid.Row="5" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF2F3806" Margin="8,8,8,8" />
             <TextBlock Text="Due Date : " TextWrapping="Wrap" Grid.Row="6" Grid.RowSpan="1" Grid.Column="1" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF2F3806" Margin="8,8,8,8" />
 
-            <TextBox x:Name="taskTextBox" Text="{Binding newItem.task, Mode=TwoWay, ValidatesOnDataErrors=True}" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" Height="20" Margin="1,1,1,1" SpellCheck.IsEnabled="True" />
+            <TextBox x:Name="taskTextBox" Text="{Binding newItem.task, Mode=TwoWay, ValidatesOnDataErrors=True}" FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" Height="20" Margin="1,1,1,1" SpellCheck.IsEnabled="True" />
             <TextBox x:Name="detailTextBox" Text="{Binding newItem.detail, Mode=TwoWay, ValidatesOnDataErrors=True}" TextWrapping="Wrap" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="1,1,1,1" SpellCheck.IsEnabled="True"/>
             <TextBlock Text="{Binding todayDate, StringFormat=MM/dd/yyyy, Mode=OneWay}"
                        TextWrapping="Wrap" Grid.Row="5" Grid.RowSpan="1" Grid.Column="2" Grid.ColumnSpan="1" FontSize="12" Foreground="#FF46f078" Margin="8,8,8,8" />

@@ -31,13 +31,13 @@
             <!--<EventSetter Event="Click" />                      NotifyOnTargetUpdated=True,  NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged -->
             <Style.Triggers>
                 <DataTrigger Binding = "{Binding Path=., Converter={StaticResource OverdueConverter}, NotifyOnTargetUpdated=True}" Value="True">
-                    <Setter Property="Background" Value="Red" />
+                    <Setter Property="Background" Value="Tomato" />
                 </DataTrigger>
                 <DataTrigger Binding = "{Binding Path=., Converter={StaticResource DueConverter}, NotifyOnTargetUpdated=True}" Value="True">
                     <Setter Property="Background" Value="Orange" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Path=., Converter={StaticResource CompletedConverter}, NotifyOnTargetUpdated=True}" Value="True">
-                    <Setter Property="Background" Value="Gray" />
+                    <Setter Property="Background" Value="#d7d7d7" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>

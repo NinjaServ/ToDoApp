@@ -44,7 +44,7 @@ namespace ToDoApp.Views
         private void refreshTimerStart()
         {
             dt = new DispatcherTimer();
-            dt.Interval = new TimeSpan(0, 1, 0); // TimeSpan.FromMinutes(1);
+            dt.Interval = new TimeSpan(0, 0, 1); // H, M, S | TimeSpan.FromMinutes(1);
             dt.Tick += timer_Tick; //new EventHandler()
             dt.Start();
             //dt.IsEnabled = true;
