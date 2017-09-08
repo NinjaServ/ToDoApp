@@ -89,6 +89,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Infrastructure\DialogService.cs" />
     <Compile Include="Infrastructure\IToDoList_Service.cs" />
     <Compile Include="Infrastructure\ModuleA_Module.cs" />
     <Compile Include="Infrastructure\ToDoList_Service.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Models\IMessage.cs" />
     <Compile Include="Models\MethodWrapper.cs" />
     <Compile Include="Models\ShowNotificationAction.cs" />
+    <Compile Include="Models\ToDoItem_Model.cs" />
     <Compile Include="Models\ToDoListItem.cs" />
     <Compile Include="Models\ToDoList_Model.cs" />
     <Compile Include="ViewModels\AddItem_ViewModel.cs" />

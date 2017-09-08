@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using System.Collections.ObjectModel;
+using Prism.Interactivity.InteractionRequest;
 using ToDoApp.Models;
 using ToDoApp.Infrastructure;
 

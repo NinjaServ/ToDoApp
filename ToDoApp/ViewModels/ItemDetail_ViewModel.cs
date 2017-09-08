@@ -8,12 +8,13 @@ using System.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using Prism.Interactivity.InteractionRequest;
 
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using ToDoApp.Models;
 using ToDoApp.Infrastructure;
-
+using Prism.Interactivity;
 
 namespace ToDoApp.ViewModels
 {
@@ -46,6 +47,12 @@ namespace ToDoApp.ViewModels
         public DelegateCommand SaveCommand { get; set; }
         //public ICollectionView ItemsCV { get; private set; }
 
+        public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
+        public DelegateCommand ConfirmationCommand { get; set; }
+
+        public static CompositeCommand confirmNavigationCommmand = new CompositeCommand();
+        bool confirmed = false; 
+
         public ItemDetail_ViewModel(IToDoList_Service toDoListService)
         {
             _toDoItemListService = toDoListService;
@@ -58,6 +65,13 @@ namespace ToDoApp.ViewModels
             CompletedCommand = new DelegateCommand(CompleteItem);
             SaveCommand = new DelegateCommand(SaveItem);
 
+            ConfirmationRequest = new InteractionRequest<IConfirmation>();
+            ConfirmationCommand = new DelegateCommand(RaiseConfirmation);
+            // ConfirmationCommand = new DelegateCommand(RaiseConfirmation);
+
+            confirmNavigationCommmand.RegisterCommand(ConfirmationCommand);
+            //confirmNavigationCommmand.RegisterCommand(GoBackCommand);
+
             //contentDirty = false;
         }
 
@@ -65,7 +79,7 @@ namespace ToDoApp.ViewModels
         // // Initialize the CollectionView for the underlying model
         // // and track the current selection.
         //this.ItemsCV = CollectionViewSource.GetDefaultView(ToDoItemList);
-   
+
 
         //public void SaveToDoItem()
         //(
@@ -73,16 +87,34 @@ namespace ToDoApp.ViewModels
         //    //_ToDoItemListService.SaveToDoItem();
         //)
 
+        void RaiseConfirmation()
+        {
+          //  string Title = "";
+          
+            ConfirmationRequest.Raise(new Confirmation
+            {
+                Title = "Confirmation",
+                Content = "Confirmation Message"
+            },
+              r => confirmed = r.Confirmed ? true : false);
+            //r => Title = r.Confirmed ? "Confirmed" : "Not Confirmed");
+        }
+
         public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
         {
             bool result = true;
 
             if( contentDirty )
             {
-                if (MessageBox.Show("Do you want to Return without saving?", "Return?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                confirmed = (MessageBox.Show("Do you want to Return without saving?", "Return?", MessageBoxButton.YesNo) == MessageBoxResult.No);
+                if(confirmed)
                     result = false;
+                //InvokeCommandAction aCommandAction = new InvokeCommandAction();
+                //aCommandAction.Command = ConfirmationCommand;
+                //aCommandAction.InvokeAction(null);
+
             }
-            
+
             continuationCallback(result);
         }
 

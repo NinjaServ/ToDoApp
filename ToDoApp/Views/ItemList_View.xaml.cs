@@ -31,14 +31,14 @@ namespace ToDoApp.Views
         ~ItemList_View()
         {
             if (dt != null)
-                dt.Stop(); 
+                dt.Stop();
         }
 
         private DispatcherTimer dt = null;
 
         private void refreshTimerSetup()
         {
-            refreshTimerStart(); 
+            refreshTimerStart();
         }
 
         private void refreshTimerStart()
@@ -56,10 +56,36 @@ namespace ToDoApp.Views
         {
             if (this.ToDoGrid != null)
             {
-                this.ToDoGrid.Items.Refresh(); 
+                //this.ToDoGrid.UpdateLayout();
+                this.ToDoGrid.Items.Refresh();
+                RestoreFocus(this.ToDoGrid, 0, true);
             }
         }
         //refreshTimerSetup();
+
+
+
+        public void RestoreFocus(DataGrid dataGrid,
+                                             int column = 0, bool scrollIntoView = false)
+        {
+            if (dataGrid.IsKeyboardFocusWithin && dataGrid.SelectedItem != null)
+            {
+                // make sure everything is up to date
+                dataGrid.UpdateLayout();
+
+                if (scrollIntoView)
+                {
+                    dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                }
+
+                var cellcontent = dataGrid.Columns[column].GetCellContent(dataGrid.SelectedItem);
+                var cell = cellcontent?.Parent as DataGridCell;
+                if (cell != null)
+                {
+                    cell.Focus();
+                }
+            }
+        }
 
     }
 

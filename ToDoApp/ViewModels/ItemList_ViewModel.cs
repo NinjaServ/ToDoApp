@@ -76,6 +76,8 @@ namespace ToDoApp.ViewModels
 
             //ItemSelectedCommand = new DelegateCommand<ToDoItem>(ItemSelected);
             _filterString = "";
+            //_filterString = "Search Text..."; 
+
 
             // Initialize the CollectionView for the underlying model
             // and track the current selection.
@@ -83,8 +85,7 @@ namespace ToDoApp.ViewModels
             //this.ItemsCV = new ListCollectionView(ToDoItemList);
             this.ItemsCV.CurrentChanged += ItemSelected; //new EventHandler(this.ItemSelected); //SelectedItemChanged
             this.ItemsCV.Filter = SearchFilter;
-            //_filterString = "Search Text..."; 
-
+            SelectedItem = this.ItemsCV.CurrentItem as ToDoItem;
 
             //Command to navigate to AddItem_View
             GoAddItemCommand = new DelegateCommand(GoAddItem, () => true);
@@ -132,7 +133,7 @@ namespace ToDoApp.ViewModels
         private void ItemSelected(object sender, EventArgs e)
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
-            SelectedItem = item;
+            bool test = SelectedItem == item;
             //var it = (ListCollectionView)sender.InternalList.CurrentItem as ToDoItem;
             //CollectionViewSource.GetDefaultView(ToDoItemList).MoveCurrentTo(this.datagrid.CurrentItem);
 
@@ -152,6 +153,7 @@ namespace ToDoApp.ViewModels
         private void SelectedItemChanged(object sender, EventArgs e)
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+            bool test = SelectedItem == item;
             //if (item != null)
             //{
             //    // Publish the SelectedEvent event.
@@ -193,6 +195,7 @@ namespace ToDoApp.ViewModels
         private void GoItemDetails()
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+            bool test = SelectedItem == item;
 
             if (item != null)
             {
@@ -207,7 +210,7 @@ namespace ToDoApp.ViewModels
         private void GoItemComplete()
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
-            SelectedItem = item; 
+            bool test = SelectedItem == item;
 
             if (item != null)
             {
@@ -220,6 +223,7 @@ namespace ToDoApp.ViewModels
         private void GoItemDelete()
         {
             ToDoItem item = this.ItemsCV.CurrentItem as ToDoItem;
+            bool test = SelectedItem == item;
 
             if (item != null)
             {
