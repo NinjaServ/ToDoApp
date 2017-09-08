@@ -63,7 +63,8 @@ namespace ToDoApp.Infrastructure
                 DataFile_Load();
             else
             {
-                Initialize_ToDoList();
+                //A test methond for Mock data
+                //Initialize_ToDoList();
                 DataFile_Save();
             }
 
@@ -115,6 +116,10 @@ namespace ToDoApp.Infrastructure
             return result;
         }
 
+        /// <summary>
+        /// A Test methond to provide dummy data to the application
+        /// </summary>
+        /// <returns></returns>
         public bool Initialize_ToDoList()
         {
             if (ToDoList != null)
